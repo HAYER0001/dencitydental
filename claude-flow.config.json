@@ -1,0 +1,54 @@
+{
+  "version": "3.5",
+  "agents": {
+    "defaultType": "coder",
+    "autoSpawn": false,
+    "maxConcurrent": 8,
+    "timeout": 300000,
+    "providers": []
+  },
+  "swarm": {
+    "topology": "hierarchical",
+    "maxAgents": 8,
+    "autoScale": false,
+    "coordinationStrategy": "leader",
+    "healthCheckInterval": 30000
+  },
+  "memory": {
+    "backend": "hybrid",
+    "persistPath": "./data/memory",
+    "cacheSize": 1000,
+    "enableHNSW": true,
+    "vectorDimension": 384
+  },
+  "mcp": {
+    "serverHost": "localhost",
+    "serverPort": 3000,
+    "autoStart": false,
+    "transportType": "stdio",
+    "tools": []
+  },
+  "cli": {
+    "colorOutput": true,
+    "interactive": true,
+    "verbosity": "normal",
+    "outputFormat": "text",
+    "progressStyle": "spinner"
+  },
+  "hooks": {
+    "enabled": true,
+    "autoExecute": true,
+    "hooks": []
+  },
+  "primary_provider": "nvidia",
+  "nvidia_model": "deepseek-v4-pro",
+  "secondary_provider": "google",
+  "google_model": "gemini-3.5-flash",
+  "tertiary_provider": "groq",
+  "groq_model": "llama-3.3-70b-versatile",
+  "quaternary_provider": "openrouter",
+  "openrouter_model": "openrouter/free",
+  "quinary_provider": "cerebras",
+  "cerebras_model": "gpt-oss-120b",
+  "filesystem_access": "full"
+}
