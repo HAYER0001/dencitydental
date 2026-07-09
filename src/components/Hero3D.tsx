@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 import { useAntiGravity } from "@/lib/useAntiGravity";
+import HeroGallery3D from "@/components/HeroGallery3D";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,6 +53,10 @@ export default function Hero3D() {
         <div className="absolute inset-0 z-0">
           <Image src="/gallery/living-room.JPG" alt="Background" fill style={{ objectFit: "cover", opacity: 0.2 }} priority />
         </div>
+
+        {/* Deep-perspective 3D clinic gallery — floats and dollies behind the
+            typography, driven by the same 400vh scroll (z-0 < z-[3] < z-[5] < z-10). */}
+        <HeroGallery3D scrollTargetRef={containerRef} />
 
         {/* Code-driven luxury mark — floats between the dark backdrop and the massive
             mix-blend-difference typography (z-0 < z-[5] < z-10). */}

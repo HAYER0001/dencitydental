@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useReducedMotion, useMotionValue, useMotionTem
 import Container from "@/components/layout/Container";
 import ScrambleText from "@/components/ui/ScrambleText";
 import { useAntiGravity } from "@/lib/useAntiGravity";
+import Magnetic from "@/components/ui/Magnetic";
 
 export type Service = {
   id: string;
@@ -292,13 +293,15 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
               </div>
 
               <div className="mt-auto pt-8">
-                <Link
-                  href={`/book?treatment=${service.id}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
-                >
-                  Book this Treatment
-                </Link>
+                <Magnetic className="block w-full" strength={0.12} glow>
+                  <Link
+                    href={`/book?treatment=${service.id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+                  >
+                    Book this Treatment
+                  </Link>
+                </Magnetic>
               </div>
             </motion.div>
           )}

@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { AlertTriangle, Loader2 } from "lucide-react";
 
 import { auth } from "@/lib/firebase";
+import Magnetic from "@/components/ui/Magnetic";
 
 /** Firebase error codes are never surfaced verbatim — always a curated message. */
 function messageForCode(code: string | undefined): string {
@@ -192,22 +193,24 @@ function SignInFormContent() {
           Remember this device
         </label>
 
-        <motion.button
-          type="submit"
-          disabled={submitting}
-          whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-          transition={{ type: "spring", stiffness: 420, damping: 24 }}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {submitting ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Signing in…
-            </>
-          ) : (
-            "Sign In"
-          )}
-        </motion.button>
+        <Magnetic className="block w-full" strength={0.12} glow>
+          <motion.button
+            type="submit"
+            disabled={submitting}
+            whileTap={reduceMotion ? undefined : { scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 420, damping: 24 }}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {submitting ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Signing in…
+              </>
+            ) : (
+              "Sign In"
+            )}
+          </motion.button>
+        </Magnetic>
       </form>
     </>
   );

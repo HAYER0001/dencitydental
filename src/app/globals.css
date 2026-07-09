@@ -186,3 +186,106 @@ h1, h2, h3, h4, h5, h6 {
     gap: 1.5rem;
   }
 }
+
+/* ─── Magnetic CTA glow ───────────────────────────────────────────────
+   A highly subtle, slow-pulse teal drop-shadow on hover for magnetic
+   buttons/links. `--glow` carries the brand colour as an RGB triplet so a
+   single keyframe serves both themes. */
+.magnetic-glow {
+  --glow: 10, 92, 92; /* clinic-teal */
+  transition: filter var(--duration-base) ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .magnetic-glow {
+    --glow: 127, 184, 184; /* clinic-teal-soft — reads better on charcoal */
+  }
+}
+
+@keyframes magnetic-glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 5px rgba(var(--glow), 0.28));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(var(--glow), 0.55));
+  }
+}
+
+@media (hover: hover) {
+  .magnetic-glow:hover {
+    animation: magnetic-glow-pulse 2.8s ease-in-out infinite;
+  }
+}
+
+/* Subtle, static focus glow on form inputs — a filter drop-shadow, so it
+   layers over (never overrides) the existing Tailwind focus ring. */
+input,
+textarea,
+select {
+  transition: filter var(--duration-base) ease, border-color var(--duration-fast) ease;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  filter: drop-shadow(0 0 7px rgba(10, 92, 92, 0.26));
+}
+
+@media (prefers-color-scheme: dark) {
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    filter: drop-shadow(0 0 8px rgba(127, 184, 184, 0.3));
+  }
+}
+
+/* Reduced motion: keep the glow, drop the pulse (a calm static halo). */
+@media (prefers-reduced-motion: reduce) {
+  .magnetic-glow:hover {
+    animation: none !important;
+    filter: drop-shadow(0 0 9px rgba(var(--glow), 0.4));
+  }
+}
+
+/* ─── Custom cursor ───────────────────────────────────────────────────
+   Hide the native cursor only while the JS-driven cursor is mounted
+   (`html.custom-cursor-active`) and only on precise pointers. If that class is
+   never applied — no JS, touch device, or reduced motion — the real cursor
+   stays, so the page is never left without one. */
+@media (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active *,
+  html.custom-cursor-active a,
+  html.custom-cursor-active button,
+  html.custom-cursor-active input,
+  html.custom-cursor-active textarea,
+  html.custom-cursor-active select,
+  html.custom-cursor-active [role="button"] {
+    cursor: none !important;
+  }
+}
+
+/* ─── Text selection ──────────────────────────────────────────────────
+   Eradicate the default browser blue with a stark, high-contrast pairing.
+   Light theme → dark ground with pure-white text. Dark theme inverts so the
+   highlight stays legible — still stark, still no blue. */
+::selection {
+  background: #0f1717;
+  color: #ffffff;
+}
+::-moz-selection {
+  background: #0f1717;
+  color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background: #f2f7f6;
+    color: #0f1717;
+  }
+  ::-moz-selection {
+    background: #f2f7f6;
+    color: #0f1717;
+  }
+}

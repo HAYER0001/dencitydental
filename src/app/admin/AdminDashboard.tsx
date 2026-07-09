@@ -149,7 +149,6 @@ export default function AdminDashboard() {
       console.error("Failed to initialize appointments query:", error);
       // Synchronous Firestore init failure (bad query/config) is a rare error
       // path — surfacing it immediately is intended, cascading render is harmless.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       failFetch(error instanceof Error ? error.message : "Failed to initialize the data connection.");
     }
 

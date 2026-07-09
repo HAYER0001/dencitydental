@@ -47,20 +47,25 @@ export default function TeamSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
           {doctors.map((doctor, index) => (
-            <div 
-              key={index} 
-              className="flex flex-col overflow-hidden rounded-card bg-background shadow-soft hover:shadow-card transition-shadow duration-300 border border-black/5"
+            <div
+              key={index}
+              className="group flex flex-col overflow-hidden rounded-card bg-background shadow-soft hover:shadow-card transition-shadow duration-300 border border-black/5 dark:border-white/10"
             >
-              <div className="relative aspect-[4/3] w-full bg-slate-100 overflow-hidden">
-                <div className="absolute inset-0 bg-clinic-teal/10 flex items-center justify-center">
-                  <span className="text-clinic-teal/30 font-medium">Photo: {doctor.name.split(' |')[0]}</span>
-                </div>
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface">
+                {/* object-top: these are upper-body portraits — anchor to the top so the
+                    4:3 crop keeps the face, never the torso. Grayscale → colour on hover. */}
                 <Image
                   src={doctor.image}
                   alt={doctor.name}
                   fill
-                  className="object-cover relative z-10"
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover object-top grayscale transition duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.04]"
+                />
+                {/* Seat the portrait into the card with a soft floor gradient — subtle in
+                    light, deeper in dark mode so the image melts into the card body. */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-background/40 to-transparent dark:from-background/70"
                 />
               </div>
               

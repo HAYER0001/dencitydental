@@ -1,5 +1,7 @@
 "use client";
 
+import Magnetic from "@/components/ui/Magnetic";
+
 export default function ContactForm() {
   return (
     <form onSubmit={(e) => e.preventDefault()} className="mt-8 space-y-4">
@@ -54,12 +56,14 @@ export default function ContactForm() {
         />
       </div>
 
-      <button
-        type="submit"
-        className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
-      >
-        Send Message
-      </button>
+      <Magnetic className="block w-full" strength={0.12} glow>
+        <button
+          type="submit"
+          className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+        >
+          Send Message
+        </button>
+      </Magnetic>
     </form>
   );
 }

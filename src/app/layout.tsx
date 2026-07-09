@@ -5,9 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ConciergeDock from "@/components/layout/ConciergeDock";
 import GreetingSequence from "@/components/layout/GreetingSequence";
-import PrecisionCursor from "../../components/ui/Cursor";
-import PageTransitionProvider from "@/components/layout/PageTransitionProvider";
-import PageWrapper from "@/components/layout/PageWrapper";
+import CustomCursor from "@/components/layout/CustomCursor";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -55,7 +53,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <GreetingSequence />
-        <PrecisionCursor />
+        <CustomCursor />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-button focus:bg-clinic-teal focus:px-4 focus:py-2 focus:text-white"
@@ -64,9 +62,8 @@ export default function RootLayout({
         </a>
         <Navbar />
         <main id="main-content" className="flex flex-1 flex-col">
-          <PageTransitionProvider>
-            <PageWrapper>{children}</PageWrapper>
-          </PageTransitionProvider>
+          {/* Per-navigation cinematic transition lives in src/app/template.tsx. */}
+          {children}
         </main>
         <Footer />
         <ConciergeDock />

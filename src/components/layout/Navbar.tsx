@@ -9,6 +9,7 @@ import { bookLink, navLinks, signInLink } from "@/lib/navigation";
 import { durations, easings } from "@/lib/motion";
 import Container from "@/components/layout/Container";
 import Logo from "@/components/layout/Logo";
+import Magnetic from "@/components/ui/Magnetic";
 
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
@@ -87,17 +88,19 @@ export default function Navbar() {
                 const active = isActive(pathname, link.href);
                 return (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      aria-current={active ? "page" : undefined}
-                      className={`block rounded-button px-3 py-2 text-body-sm font-medium transition-colors duration-[var(--duration-fast)] ${
-                        active
-                          ? "text-clinic-teal font-semibold"
-                          : "text-foreground/70 hover:bg-white/40 hover:text-foreground dark:hover:bg-white/10"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
+                    <Magnetic>
+                      <Link
+                        href={link.href}
+                        aria-current={active ? "page" : undefined}
+                        className={`block rounded-button px-3 py-2 text-body-sm font-medium transition-colors duration-[var(--duration-fast)] ${
+                          active
+                            ? "text-clinic-teal font-semibold"
+                            : "text-foreground/70 hover:bg-white/40 hover:text-foreground dark:hover:bg-white/10"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </Magnetic>
                   </li>
                 );
               })}
@@ -118,18 +121,22 @@ export default function Navbar() {
                 <span>Meditation Mode</span>
               </button>
 
-              <Link
-                href={signInLink.href}
-                className="rounded-button px-3 py-2 text-body-sm font-medium text-foreground/70 transition-colors duration-[var(--duration-fast)] hover:text-foreground"
-              >
-                {signInLink.label}
-              </Link>
-              <Link
-                href={bookLink.href}
-                className="rounded-pill bg-clinic-teal px-5 py-2.5 text-body-sm font-semibold text-white shadow-soft transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-clinic-teal/90 hover:shadow-card"
-              >
-                {bookLink.label}
-              </Link>
+              <Magnetic>
+                <Link
+                  href={signInLink.href}
+                  className="rounded-button px-3 py-2 text-body-sm font-medium text-foreground/70 transition-colors duration-[var(--duration-fast)] hover:text-foreground"
+                >
+                  {signInLink.label}
+                </Link>
+              </Magnetic>
+              <Magnetic glow>
+                <Link
+                  href={bookLink.href}
+                  className="rounded-pill bg-clinic-teal px-5 py-2.5 text-body-sm font-semibold text-white shadow-soft transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-clinic-teal/90 hover:shadow-card"
+                >
+                  {bookLink.label}
+                </Link>
+              </Magnetic>
             </div>
 
             <button

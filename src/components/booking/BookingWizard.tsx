@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 import { checkAvailability, createBooking, type BookingDetails } from "@/app/book/actions";
 import { springs } from "@/lib/motion";
+import Magnetic from "@/components/ui/Magnetic";
 
 type Step = "treatment" | "date" | "time" | "details" | "confirmation";
 
@@ -562,20 +563,22 @@ function BookingWizardContent() {
                     &larr; Back to time slots
                   </button>
 
-                  <button
-                    type="submit"
-                    disabled={isPending}
-                    className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-6 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 disabled:opacity-50"
-                  >
-                    {isPending ? (
-                      <span className="flex items-center gap-2">
-                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                        Scheduling...
-                      </span>
-                    ) : (
-                      "Confirm Appointment"
-                    )}
-                  </button>
+                  <Magnetic strength={0.22} glow>
+                    <button
+                      type="submit"
+                      disabled={isPending}
+                      className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-6 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 disabled:opacity-50"
+                    >
+                      {isPending ? (
+                        <span className="flex items-center gap-2">
+                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                          Scheduling...
+                        </span>
+                      ) : (
+                        "Confirm Appointment"
+                      )}
+                    </button>
+                  </Magnetic>
                 </div>
               </form>
             </motion.div>

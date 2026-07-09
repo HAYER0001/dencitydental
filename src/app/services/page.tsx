@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import Container from "@/components/layout/Container";
+import Magnetic from "@/components/ui/Magnetic";
 
 export const metadata: Metadata = {
   title: "Dental Services",
@@ -139,12 +140,14 @@ export default function ServicesPage() {
                   </div>
 
                   <div className="mt-8">
-                    <Link
-                      href={`/book?treatment=${service.id}`}
-                      className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 text-body-sm font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
-                    >
-                      Book Appointment
-                    </Link>
+                    <Magnetic className="block w-full" strength={0.12} glow>
+                      <Link
+                        href={`/book?treatment=${service.id}`}
+                        className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 text-body-sm font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+                      >
+                        Book Appointment
+                      </Link>
+                    </Magnetic>
                   </div>
                 </div>
               </article>
