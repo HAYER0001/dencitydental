@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp, type FirebaseOptions } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getAuth, type Auth } from 'firebase/auth';
+import { getFirestore, type Firestore } from 'firebase/firestore';
 import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics';
 
 /**
@@ -53,8 +53,21 @@ if (!firebaseConfigValid && typeof window !== 'undefined') {
  */
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+/**
+ * Auth and Firestore are browser-only singletons.
+ *
+ * Initialising them at module scope runs `getAuth`/`getFirestore` wherever this
+ * module is evaluated — including on the server during SSR/prerender, where the
+ * runtime API key is absent and Firebase throws `auth/invalid-api-key`, failing
+ * the Vercel build. Gating on `typeof window` defers initialisation to the
+ * client, where every consumer already touches them only inside effects and
+ * event handlers. `initializeApp` above is safe to run anywhere — it registers
+ * config without validating the key.
+ */
+export const auth: Auth =
+  typeof window !== 'undefined' ? getAuth(app) : (undefined as unknown as Auth);
+export const db: Firestore =
+  typeof window !== 'undefined' ? getFirestore(app) : (undefined as unknown as Firestore);
 
 /**
  * Analytics is browser-only. It touches `window`/`document` and the
