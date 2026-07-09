@@ -38,15 +38,15 @@ export default function GreetingSequence() {
   useEffect(() => {
     if (!show) return;
 
-    let timer1 = setTimeout(() => setIndex(1), 900);
-    let timer2 = setTimeout(() => setIndex(2), 1800);
-    let timer3 = setTimeout(() => setIndex(3), 2700);
-    
+    const timer1 = setTimeout(() => setIndex(1), 900);
+    const timer2 = setTimeout(() => setIndex(2), 1800);
+    const timer3 = setTimeout(() => setIndex(3), 2700);
+
     // 3. Exit: Wipe transition after the final word
-    let timer4 = setTimeout(() => setIsWiping(true), 3600);
-    
+    const timer4 = setTimeout(() => setIsWiping(true), 3600);
+
     // Tear down component overlay
-    let timer5 = setTimeout(() => {
+    const timer5 = setTimeout(() => {
       setShow(false);
       sessionStorage.setItem("greeting-seen", "true");
     }, 4400);

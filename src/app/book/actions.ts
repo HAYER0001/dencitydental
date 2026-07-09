@@ -8,7 +8,6 @@ const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID || "primary";
 export type BookingDetails = {
   treatmentId: string;
   treatmentName: string;
-  dentistName: string;
   date: string; // YYYY-MM-DD
   time: string; // HH:MM
   patientName: string;
@@ -71,7 +70,8 @@ const ALL_SLOTS = [
 // Helper to convert slot e.g. "09:00 AM" on date "2026-07-04" to ISO string
 function slotToDate(dateStr: string, slotStr: string): Date {
   const [time, period] = slotStr.split(" ");
-  let [hours, minutes] = time.split(":").map(Number);
+  const [rawHours, minutes] = time.split(":").map(Number);
+  let hours = rawHours;
   if (period === "PM" && hours !== 12) {
     hours += 12;
   } else if (period === "AM" && hours === 12) {
@@ -89,7 +89,6 @@ export async function checkAvailability(dateStr: string): Promise<string[]> {
 
   if (!calendar) {
     // Local dev or credentials missing: return mock available slots
-    console.log(`[Calendar API] Google credentials missing. Using deterministic mock availability for ${dateStr}.`);
     const busy = getMockBusySlots(dateStr, ALL_SLOTS);
     return ALL_SLOTS.filter((slot) => !busy.includes(slot));
   }
@@ -148,7 +147,6 @@ export async function createBooking(details: BookingDetails): Promise<{
 
   if (!calendar) {
     // Local dev fallback
-    console.log("[Calendar API] Google credentials missing. Simulating successful local booking:", details);
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
     return {
@@ -164,7 +162,6 @@ export async function createBooking(details: BookingDetails): Promise<{
 
     const eventDescription = `
 Treatment: ${details.treatmentName}
-Dentist: ${details.dentistName}
 Patient Name: ${details.patientName}
 Patient Phone: ${details.patientPhone}
 Notes: ${details.notes || "None"}
@@ -195,11 +192,11 @@ Notes: ${details.notes || "None"}
       success: true,
       eventId: response.data.id || undefined,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error inserting Google Calendar event:", error);
     return {
       success: false,
-      error: error.message || "Failed to create Google Calendar event.",
+      error: error instanceof Error ? error.message : "Failed to create Google Calendar event.",
     };
   }
 }

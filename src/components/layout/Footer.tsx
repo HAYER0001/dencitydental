@@ -59,12 +59,16 @@ export default function Footer() {
 
           <div>
             <h2 className="text-eyebrow text-white/60">Contact</h2>
-            <ul className="mt-4 space-y-3 text-body-sm text-white/80">
-              <li>
-                42 Wellness Avenue, Suite 3
-                <br />
-                Your City
-              </li>
+            {/* Address as an editorial block: distinct lines, tight leading, no icon —
+                the typography carries it. */}
+            <address className="mt-5 not-italic text-body-lg font-semibold leading-[1.15] tracking-[-0.01em] text-white">
+              Swami Vivekananda Nagar
+              <br />
+              Suratgarh
+              <br />
+              Rajasthan 335804
+            </address>
+            <ul className="mt-8 space-y-3 text-body-sm text-white/70">
               <li>
                 <a
                   href="tel:+15550123456"

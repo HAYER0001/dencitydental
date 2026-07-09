@@ -73,7 +73,7 @@ export default function DentalAnatomy() {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   priority
-                  className="object-contain filter drop-shadow-md"
+                  className="object-contain filter drop-shadow-none"
                 />
               </motion.div>
 
@@ -92,7 +92,7 @@ export default function DentalAnatomy() {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   priority
-                  className="object-contain filter drop-shadow-md"
+                  className="object-contain filter drop-shadow-none"
                 />
               </motion.div>
 
@@ -111,7 +111,7 @@ export default function DentalAnatomy() {
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   priority
-                  className="object-contain filter drop-shadow-md"
+                  className="object-contain filter drop-shadow-none"
                 />
               </motion.div>
             </motion.div>

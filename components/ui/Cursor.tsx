@@ -84,7 +84,7 @@ export default function PrecisionCursor() {
     // 4. Global: Hidden on mobile (hidden md:block), ignores touch events
     <div className="hidden md:block pointer-events-none fixed inset-0 z-[100]">
       {/* 1. Visuals: Crisp outer ring (white with 1px teal border) */}
-      {/* 3. Interaction: Snaps to square (rounded-[4px]) and pulses once on hover */}
+      {/* 3. Interaction: Snaps to square (rounded-none) and pulses once on hover */}
       <motion.div
         style={{
           x: outerX,

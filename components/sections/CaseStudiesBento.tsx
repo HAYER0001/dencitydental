@@ -6,6 +6,7 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
 import Container from "@/components/layout/Container";
+import { useAntiGravity } from "@/lib/useAntiGravity";
 
 export type CaseStudy = {
   id: string;
@@ -17,6 +18,99 @@ export type CaseStudy = {
   colSpanClass: string;
   animationVariant: any;
 };
+
+function CaseCard({
+  study,
+  index,
+  reduceMotion,
+}: {
+  study: CaseStudy;
+  index: number;
+  reduceMotion: boolean;
+}) {
+  // Each card floats on its own desynced spring so the grid breathes organically
+  // rather than drifting in lockstep. Alternating amplitude adds to the effect.
+  const floatY = useAntiGravity({
+    amplitude: index % 2 === 0 ? 10 : 7,
+    stiffness: 20,
+    damping: 12,
+    mass: 1.5,
+    delay: index * 0.5,
+    enabled: !reduceMotion,
+  });
+
+  return (
+    <motion.article
+      variants={reduceMotion ? undefined : study.animationVariant}
+      style={{ y: floatY }}
+      className={`group relative overflow-hidden rounded-none border border-[#0F1717]/5 bg-white shadow-none flex flex-col justify-between ${study.colSpanClass}`}
+    >
+      {/* Before/After Split Preview */}
+      <div className="absolute inset-0 z-0 flex w-full h-full overflow-hidden">
+        {/* Left Side: Before (Grayscale & overlay) */}
+        <div className="relative w-1/2 h-full overflow-hidden bg-zinc-800">
+          <Image
+            src="/images/bright_smile.jpg"
+            alt={`${study.title} Before`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover grayscale brightness-50 contrast-125 object-center pointer-events-none"
+          />
+          <div className="absolute top-4 left-4 z-10 rounded bg-[#0F1717]/70 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-white">
+            Before
+          </div>
+        </div>
+
+        {/* Vertical Divider line */}
+        <div className="w-0.5 bg-white/20 h-full z-10 relative pointer-events-none" />
+
+        {/* Right Side: After (Vibrant, full color) */}
+        <div className="relative w-1/2 h-full overflow-hidden bg-zinc-700">
+          <Image
+            src="/images/bright_smile.jpg"
+            alt={`${study.title} After`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover object-center pointer-events-none"
+          />
+          <div className="absolute top-4 right-4 z-10 rounded bg-[#0A5C5C]/80 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-white">
+            After
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Aesthetic: Glass-morphism Overlay on Hover */}
+      <div className="absolute inset-0 z-10 bg-[#0F1717]/35 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+        <span className="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/90">
+          {study.treatment}
+        </span>
+        <h3 className="text-base font-bold text-white mt-1.5 flex items-center gap-1.5">
+          {study.title} <ArrowUpRight className="h-4 w-4 shrink-0 text-[#7fb8b8]" />
+        </h3>
+        <p className="text-xs text-white/70 mt-2 leading-relaxed max-w-md">
+          {study.description}
+        </p>
+        <div className="mt-4 flex gap-4 text-[0.65rem] font-medium text-white/50 border-t border-white/10 pt-3">
+          <span><strong>From:</strong> {study.beforeLabel}</span>
+          <span><strong>To:</strong> {study.afterLabel}</span>
+        </div>
+      </div>
+
+      {/* Static overlay shown when NOT hovered (shows simple title card bottom bar) */}
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-5 z-10 group-hover:opacity-0 transition-opacity duration-300 flex items-end justify-between pointer-events-none">
+        <div>
+          <span className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[#7fb8b8]">
+            {study.treatment}
+          </span>
+          <h4 className="text-sm font-bold text-white mt-0.5">{study.title}</h4>
+        </div>
+        <div className="h-7 w-7 rounded-full bg-white/10 flex items-center justify-center text-white">
+          <ArrowUpRight className="h-4 w-4" />
+        </div>
+      </div>
+    </motion.article>
+  );
+}
 
 export default function CaseStudiesBento() {
   const [mounted, setMounted] = useState(false);
@@ -37,9 +131,11 @@ export default function CaseStudiesBento() {
     visible: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 90, damping: 16 } },
   };
 
+  // Reveals on the y-axis are avoided here: the permanent anti-gravity float owns `y`,
+  // so this card emerges on scale instead to keep the two motions from fighting.
   const flyBottom = {
-    hidden: { opacity: 0, y: 70 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 90, damping: 16 } },
+    hidden: { opacity: 0, scale: 0.92 },
+    visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 90, damping: 16 } },
   };
 
   const caseStudies: CaseStudy[] = [
@@ -95,7 +191,7 @@ export default function CaseStudiesBento() {
     return (
       <section
         aria-labelledby="casestudies-section-title"
-        className="py-20 bg-background overflow-hidden relative flex flex-col justify-center border-b border-[#0F1717]/5"
+        className="py-section-sm bg-background overflow-hidden relative flex flex-col justify-center border-b border-[#0F1717]/5"
       >
         <Container>
           <div className="max-w-2xl mb-12">
@@ -113,7 +209,7 @@ export default function CaseStudiesBento() {
             {caseStudies.map((study) => (
               <article
                 key={study.id}
-                className={`group relative overflow-hidden rounded-[1rem] border border-[#0F1717]/5 bg-white shadow-[0_1px_2px_rgba(15,23,23,0.05),0_4px_12px_rgba(15,23,23,0.06)] flex flex-col justify-between ${study.colSpanClass}`}
+                className={`group relative overflow-hidden rounded-none border border-[#0F1717]/5 bg-white shadow-none flex flex-col justify-between ${study.colSpanClass}`}
               >
                 <div className="absolute inset-0 z-0 flex w-full h-full overflow-hidden">
                   <div className="relative w-1/2 h-full overflow-hidden bg-zinc-800">
@@ -175,7 +271,7 @@ export default function CaseStudiesBento() {
     <section
       ref={sectionRef}
       aria-labelledby="casestudies-section-title"
-      className="py-20 bg-background overflow-hidden relative flex flex-col justify-center border-b border-[#0F1717]/5"
+      className="py-section-sm bg-background overflow-hidden relative flex flex-col justify-center border-b border-[#0F1717]/5"
     >
       <Container>
         <div className="max-w-2xl mb-12">
@@ -197,76 +293,13 @@ export default function CaseStudiesBento() {
           animate={inView ? "visible" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[220px]"
         >
-          {caseStudies.map((study) => (
-            <motion.article
+          {caseStudies.map((study, index) => (
+            <CaseCard
               key={study.id}
-              variants={reduceMotion ? undefined : study.animationVariant}
-              className={`group relative overflow-hidden rounded-[1rem] border border-[#0F1717]/5 bg-white shadow-[0_1px_2px_rgba(15,23,23,0.05),0_4px_12px_rgba(15,23,23,0.06)] flex flex-col justify-between ${study.colSpanClass}`}
-            >
-              {/* Before/After Split Preview */}
-              <div className="absolute inset-0 z-0 flex w-full h-full overflow-hidden">
-                {/* Left Side: Before (Grayscale & overlay) */}
-                <div className="relative w-1/2 h-full overflow-hidden bg-zinc-800">
-                  <Image
-                    src="/images/bright_smile.jpg"
-                    alt={`${study.title} Before`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover grayscale brightness-50 contrast-125 object-center pointer-events-none"
-                  />
-                  <div className="absolute top-4 left-4 z-10 rounded bg-[#0F1717]/70 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-white">
-                    Before
-                  </div>
-                </div>
-
-                {/* Vertical Divider line */}
-                <div className="w-0.5 bg-white/20 h-full z-10 relative pointer-events-none" />
-
-                {/* Right Side: After (Vibrant, full color) */}
-                <div className="relative w-1/2 h-full overflow-hidden bg-zinc-700">
-                  <Image
-                    src="/images/bright_smile.jpg"
-                    alt={`${study.title} After`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-center pointer-events-none"
-                  />
-                  <div className="absolute top-4 right-4 z-10 rounded bg-[#0A5C5C]/80 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-white">
-                    After
-                  </div>
-                </div>
-              </div>
-
-              {/* 3. Aesthetic: Glass-morphism Overlay on Hover */}
-              <div className="absolute inset-0 z-10 bg-[#0F1717]/35 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
-                <span className="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/90">
-                  {study.treatment}
-                </span>
-                <h3 className="text-base font-bold text-white mt-1.5 flex items-center gap-1.5">
-                  {study.title} <ArrowUpRight className="h-4 w-4 shrink-0 text-[#7fb8b8]" />
-                </h3>
-                <p className="text-xs text-white/70 mt-2 leading-relaxed max-w-md">
-                  {study.description}
-                </p>
-                <div className="mt-4 flex gap-4 text-[0.65rem] font-medium text-white/50 border-t border-white/10 pt-3">
-                  <span><strong>From:</strong> {study.beforeLabel}</span>
-                  <span><strong>To:</strong> {study.afterLabel}</span>
-                </div>
-              </div>
-
-              {/* Static overlay shown when NOT hovered (shows simple title card bottom bar) */}
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-5 z-10 group-hover:opacity-0 transition-opacity duration-300 flex items-end justify-between pointer-events-none">
-                <div>
-                  <span className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[#7fb8b8]">
-                    {study.treatment}
-                  </span>
-                  <h4 className="text-sm font-bold text-white mt-0.5">{study.title}</h4>
-                </div>
-                <div className="h-7 w-7 rounded-full bg-white/10 flex items-center justify-center text-white">
-                  <ArrowUpRight className="h-4 w-4" />
-                </div>
-              </div>
-            </motion.article>
+              study={study}
+              index={index}
+              reduceMotion={!!reduceMotion}
+            />
           ))}
         </motion.div>
       </Container>

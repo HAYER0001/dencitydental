@@ -40,7 +40,7 @@ const defaultActions: DockAction[] = [
   },
   {
     label: "Directions",
-    href: "https://maps.google.com/?q=DENCITY+Dental+Care",
+    href: "https://maps.google.com/?q=Swami+Vivekananda+Nagar+Suratgarh+Rajasthan+335804",
     external: true,
     icon: (
       <>

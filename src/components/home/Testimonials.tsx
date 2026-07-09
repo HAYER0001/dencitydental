@@ -1,8 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import Container from "@/components/layout/Container";
-import { fadeUp } from "@/lib/motion";
 
 export type Testimonial = {
   id: string;
@@ -95,7 +93,6 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 }
 
 export default function Testimonials() {
-  const reduceMotion = useReducedMotion();
   // Duplicate list to achieve infinite marquee looping seamlessly
   const doubledTestimonials = [...testimonials, ...testimonials];
 

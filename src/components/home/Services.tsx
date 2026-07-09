@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion, useMotionValue, useMotionTemplate, useTransform, animate } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useMotionValue, useMotionTemplate, useTransform, animate, type Variants } from "framer-motion";
 
 import Container from "@/components/layout/Container";
 import ScrambleText from "@/components/ui/ScrambleText";
+import { useAntiGravity } from "@/lib/useAntiGravity";
 
 export type Service = {
   id: string;
@@ -125,14 +126,15 @@ const services: Service[] = [
 
 interface ServiceCardProps {
   service: Service;
+  index: number;
   isExpanded: boolean;
   onClick: () => void;
-  cardVariants: any;
-  pathVariants: any;
+  cardVariants: Variants;
+  pathVariants: Variants;
   reduceMotion: boolean;
 }
 
-function ServiceCard({ service, isExpanded, onClick, cardVariants, pathVariants, reduceMotion }: ServiceCardProps) {
+function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVariants, reduceMotion }: ServiceCardProps) {
   const defaultWidth = 300;
   const defaultHeight = 200;
 
@@ -141,6 +143,24 @@ function ServiceCard({ service, isExpanded, onClick, cardVariants, pathVariants,
 
   const attractX = useTransform(mouseX, [0, defaultWidth], [-5, 5]);
   const attractY = useTransform(mouseY, [0, defaultHeight], [-5, 5]);
+
+  // Permanent anti-gravity float, desynced per card. It pauses (eases to rest)
+  // while the card is expanded so the open panel — and its "Book" action — holds
+  // perfectly still for reading and clicking.
+  const floatY = useAntiGravity({
+    amplitude: 9,
+    stiffness: 20,
+    damping: 12,
+    mass: 1.5,
+    delay: index * 0.35,
+    enabled: !isExpanded,
+  });
+
+  // Float and mouse-attract share the y-axis, so compose them into a single value.
+  const composedY = useTransform(
+    [floatY, attractY] as const,
+    ([f, a]: number[]) => f + a
+  );
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -189,11 +209,11 @@ function ServiceCard({ service, isExpanded, onClick, cardVariants, pathVariants,
             ? "border-clinic-teal/40 ring-1 ring-clinic-teal/40 md:col-span-2 lg:col-span-2"
             : "border-deep-charcoal/5 hover:border-clinic-teal/25"
         }`}
-        style={{ 
+        style={{
           x: reduceMotion ? 0 : attractX,
-          y: reduceMotion ? 0 : attractY,
+          y: reduceMotion ? 0 : composedY,
           clipPath: reduceMotion ? undefined : `url(#clip-${service.id})`,
-          contentVisibility: "auto" 
+          contentVisibility: "auto"
         }}
       >
         {/* Soft interactive spotlight layer */}
@@ -330,27 +350,29 @@ export default function Services() {
     },
   };
 
-  // 2. Animation: Emerge from bottom with blur-out (blur(10px) to blur(0px))
-  const cardVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 40, 
-      filter: "blur(10px)" 
+  // 2. Animation: Emerge with a blur-out (blur(10px) to blur(0px)) and gentle scale.
+  // The reveal stays off the y-axis — that axis belongs to the permanent float — so
+  // the two never fight for the same transform.
+  const cardVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.96,
+      filter: "blur(10px)"
     },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      scale: 1,
       filter: "blur(0px)",
-      transition: { type: "spring", stiffness: 90, damping: 14 } as const
+      transition: { type: "spring", stiffness: 90, damping: 14 }
     },
   };
 
   // 1. Effect: Organic path morphing configurations
-  const pathVariants = {
-    hidden: { 
-      d: "M 0,0 L 1,0 L 1,0 Q 0.5,0 0,0 Z" 
+  const pathVariants: Variants = {
+    hidden: {
+      d: "M 0,0 L 1,0 L 1,0 Q 0.5,0 0,0 Z"
     },
-    visible: { 
+    visible: {
       d: "M 0,0 L 1,0 L 1,1 Q 0.5,1 0,1 Z",
       transition: { duration: 1.4, ease: [0.6, 0.05, -0.01, 0.9] }
     }
@@ -416,10 +438,11 @@ export default function Services() {
           viewport={{ once: true, amount: 0.3 }}
           className="mt-12 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
         >
-          {services.map((service) => (
+          {services.map((service, index) => (
             <ServiceCard
               key={service.id}
               service={service}
+              index={index}
               isExpanded={expandedId === service.id}
               onClick={() => handleCardClick(service.id)}
               cardVariants={cardVariants}

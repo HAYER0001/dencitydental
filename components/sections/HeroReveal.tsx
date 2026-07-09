@@ -48,7 +48,7 @@ export default function HeroReveal() {
             borderRadius: mounted ? (reduceMotion ? "0px" : imageBorderRadius) : "24px",
             scale: mounted ? (reduceMotion ? 1 : imageScale) : 0.8,
           }}
-          className="absolute z-0 flex items-center justify-center overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-black"
+          className="absolute z-0 flex items-center justify-center overflow-hidden shadow-none bg-black"
         >
           {/* Black & White Mountain Landscape Image */}
           <div 

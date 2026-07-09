@@ -162,11 +162,11 @@ export default function Pricing() {
     },
   };
 
-  const staticCardStyles = "bg-white rounded-[1rem] border border-[#0F1717]/5 p-8 flex flex-col items-center text-center shadow-[0_1px_2px_rgba(15,23,23,0.05),0_4px_12px_rgba(15,23,23,0.06)]";
+  const staticCardStyles = "bg-white rounded-none border border-[#0F1717]/5 p-8 flex flex-col items-center text-center shadow-none";
 
   if (!mounted) {
     return (
-      <section className="py-16 bg-[#F9F9F9]" aria-labelledby="pricing-section-title">
+      <section className="py-section-sm bg-[#F9F9F9]" aria-labelledby="pricing-section-title">
         <div className="mx-auto w-full max-w-6xl px-6">
           <div className="text-center mb-12">
             <p className="text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-[#0A5C5C]">
@@ -203,7 +203,7 @@ export default function Pricing() {
   }
 
   return (
-    <section className="py-16 bg-[#F9F9F9]" aria-labelledby="pricing-section-title">
+    <section className="py-section-sm bg-[#F9F9F9]" aria-labelledby="pricing-section-title">
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="text-center mb-12">
           <p className="text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-[#0A5C5C]">

@@ -20,6 +20,10 @@ export const transitions = {
 
 export const springs = {
   gentle: { type: "spring", stiffness: 260, damping: 28, mass: 0.9 },
+  /** Weighted panel slide — enters with momentum, settles with damping. */
+  panel: { type: "spring", stiffness: 240, damping: 26, mass: 1.05 },
+  /** Snappy tactile press for buttons/cards. */
+  press: { type: "spring", stiffness: 420, damping: 24, mass: 0.7 },
 } satisfies Record<string, Transition>;
 
 export const fadeIn: Variants = {

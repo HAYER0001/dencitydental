@@ -108,7 +108,7 @@ export default function PixelAssembleText({ text = "Clinical Excellence" }: Pixe
 
   if (!mounted) {
     return (
-      <section className="py-20 bg-background border-b border-[#0F1717]/5" aria-labelledby="pixel-section-title">
+      <section className="py-section-sm bg-background border-b border-[#0F1717]/5" aria-labelledby="pixel-section-title">
         <Container className="flex flex-col items-center">
           <h2 id="pixel-section-title" className="text-3xl font-bold tracking-tight text-center text-[#0F1717]">
             {text}
@@ -122,7 +122,7 @@ export default function PixelAssembleText({ text = "Clinical Excellence" }: Pixe
     <section 
       ref={containerRef}
       aria-labelledby="pixel-section-title"
-      className="py-24 bg-[#F9F9F9] border-b border-[#0F1717]/5 overflow-hidden flex flex-col justify-center min-h-[450px]"
+      className="py-section-sm bg-[#F9F9F9] border-b border-[#0F1717]/5 overflow-hidden flex flex-col justify-center min-h-[450px]"
     >
       <Container className="flex flex-col items-center justify-center relative">
         <div className="max-w-2xl text-center mb-16">
@@ -165,7 +165,7 @@ export default function PixelAssembleText({ text = "Clinical Excellence" }: Pixe
                   custom={{ rx: pixel.rx, ry: pixel.ry }}
                   variants={pixelVariants}
                   // 1. Concept: 14x14px black square block representation
-                  className="absolute w-[14px] h-[14px] bg-[#0F1717] rounded-[2px]"
+                  className="absolute w-[14px] h-[14px] bg-[#0F1717] rounded-none"
                   style={{
                     left: pixel.x,
                     top: pixel.y,

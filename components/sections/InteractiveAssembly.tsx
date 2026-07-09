@@ -90,7 +90,7 @@ export default function InteractiveAssembly() {
     return (
       <section 
         aria-labelledby="assembly-section-title"
-        className="py-20 bg-background overflow-hidden relative flex flex-col justify-center min-h-[750px] border-b border-[#0F1717]/5"
+        className="py-section-sm bg-background overflow-hidden relative flex flex-col justify-center min-h-[750px] border-b border-[#0F1717]/5"
       >
         <Container className="flex flex-col items-center">
           <div className="max-w-2xl text-center mb-16">
@@ -108,7 +108,7 @@ export default function InteractiveAssembly() {
             {cards.map((card) => (
               <article
                 key={card.id}
-                className="flex flex-col justify-between rounded-[1rem] border border-[#0F1717]/5 bg-[#F9F9F9] p-6 shadow-[0_1px_2px_rgba(15,23,23,0.05),0_4px_12px_rgba(15,23,23,0.06)] h-[220px]"
+                className="flex flex-col justify-between rounded-none border border-[#0F1717]/5 bg-[#F9F9F9] p-6 shadow-none h-[220px]"
               >
                 <div className="space-y-4">
                   <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0A5C5C]/10 text-[#0A5C5C]">
@@ -131,7 +131,7 @@ export default function InteractiveAssembly() {
     <section 
       ref={containerRef}
       aria-labelledby="assembly-section-title"
-      className="py-20 bg-background overflow-hidden relative flex flex-col justify-center min-h-[750px] border-b border-[#0F1717]/5"
+      className="py-section-sm bg-background overflow-hidden relative flex flex-col justify-center min-h-[750px] border-b border-[#0F1717]/5"
     >
       {/* 1. Layout & Scroll Un-tangling: Intersection Observer via onViewportEnter */}
       <motion.div 
@@ -196,7 +196,7 @@ export default function InteractiveAssembly() {
                         }
                   }
                   // 2. Premium Aesthetic & Color Injection: Off-White, Deep Charcoal, slate text
-                  className={`flex flex-col justify-between rounded-[1rem] border border-[#0F1717]/5 bg-[#F9F9F9] p-6 shadow-[0_1px_2px_rgba(15,23,23,0.05),0_4px_12px_rgba(15,23,23,0.06)] ${
+                  className={`flex flex-col justify-between rounded-none border border-[#0F1717]/5 bg-[#F9F9F9] p-6 shadow-none ${
                     isExploded
                       ? "relative w-full h-[220px]"
                       : "absolute w-[285px] h-[200px]"

@@ -48,7 +48,7 @@ export default function MacroReveal() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       aria-labelledby="macro-section-title"
-      className="relative min-h-[140vh] bg-black w-full flex flex-col justify-center overflow-hidden py-24"
+      className="relative min-h-[140vh] bg-black w-full flex flex-col justify-center overflow-hidden py-section-sm"
       style={{ perspective: "1000px" }}
     >
       <div className="sticky top-0 h-screen w-full flex items-center">
@@ -84,7 +84,7 @@ export default function MacroReveal() {
                 opacity: mounted && !reduceMotion ? opacityVal : 1,
                 filter: mounted && !reduceMotion ? `blur(${blurVal})` : "blur(0px)",
               }}
-              className="relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] rounded-[24px] overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900 will-change-[transform,opacity,filter]"
+              className="relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] rounded-none overflow-hidden border border-zinc-800 shadow-none bg-zinc-900 will-change-[transform,opacity,filter]"
             >
               {/* Implant Asset */}
               <Image

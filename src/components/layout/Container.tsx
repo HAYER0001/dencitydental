@@ -7,7 +7,7 @@ type ContainerProps = {
 };
 
 export default function Container({ as = "div", className, children }: ContainerProps) {
-  const Tag: any = as;
+  const Tag = as;
   return (
     <Tag className={["mx-auto w-full max-w-6xl px-gutter", className].filter(Boolean).join(" ")}>
       {children}

@@ -66,23 +66,25 @@ export default function ContactPage() {
               </dl>
             </div>
 
-            <div className="rounded-card border border-deep-charcoal/5 bg-background p-7 shadow-soft dark:border-white/10">
-              <h2 className="text-heading-3 text-clinic-teal dark:text-clinic-teal-soft">Our Location</h2>
-              <p className="mt-4 text-body-sm text-muted leading-relaxed">
-                DENCITY Dental Care<br />
-                100 Premium Clinic Square<br />
-                Suite 400, Medical District
-              </p>
-              <p className="mt-4">
-                <a
-                  href="https://maps.google.com/?q=DENCITY+Dental+Care"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-body-sm font-semibold text-clinic-teal hover:underline dark:text-clinic-teal-soft"
-                >
-                  Get Directions &rarr;
-                </a>
-              </p>
+            <div className="rounded-card border border-deep-charcoal/5 bg-background p-9 shadow-soft dark:border-white/10">
+              <h2 className="text-eyebrow text-clinic-teal dark:text-clinic-teal-soft">Visit the practice</h2>
+              {/* Editorial address: full brutalist heading scale, aggressive leading,
+                  broken into clean print-style lines. No map-pin icon — type alone. */}
+              <address className="mt-8 not-italic text-heading-3 leading-[1.1] text-foreground">
+                Swami Vivekananda Nagar
+                <br />
+                Suratgarh
+                <br />
+                Rajasthan 335804
+              </address>
+              <a
+                href="https://maps.google.com/?q=Swami+Vivekananda+Nagar+Suratgarh+Rajasthan+335804"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-10 inline-block text-eyebrow text-clinic-teal transition-colors hover:text-clinic-teal/70 dark:text-clinic-teal-soft"
+              >
+                Get Directions
+              </a>
             </div>
           </div>
 

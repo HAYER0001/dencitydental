@@ -5,11 +5,38 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 import { checkAvailability, createBooking, type BookingDetails } from "@/app/book/actions";
-import { springs, transitions } from "@/lib/motion";
+import { springs } from "@/lib/motion";
 
-type Step = "treatment" | "dentist" | "date" | "time" | "details" | "confirmation";
+type Step = "treatment" | "date" | "time" | "details" | "confirmation";
 
-const stepsOrder: Step[] = ["treatment", "dentist", "date", "time", "details", "confirmation"];
+const stepsOrder: Step[] = ["treatment", "date", "time", "details", "confirmation"];
+
+type FieldErrors = { name?: string; email?: string; phone?: string };
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Sleek, height-animated inline field error. */
+function FieldError({ id, message }: { id?: string; message?: string }) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <AnimatePresence initial={false}>
+      {message && (
+        <motion.p
+          key="error"
+          id={id}
+          role="alert"
+          initial={{ opacity: 0, height: 0, y: -4 }}
+          animate={{ opacity: 1, height: "auto", y: 0 }}
+          exit={{ opacity: 0, height: 0, y: -4 }}
+          transition={reduceMotion ? { duration: 0 } : { ...springs.press, opacity: { duration: 0.15 } }}
+          className="mt-1.5 overflow-hidden text-xs font-medium text-red-500"
+        >
+          {message}
+        </motion.p>
+      )}
+    </AnimatePresence>
+  );
+}
 
 const treatments = [
   { id: "general", name: "General Dentistry", description: "Routine exams, scaling, cleanings, and composite fillings." },
@@ -18,13 +45,6 @@ const treatments = [
   { id: "implants", name: "Dental Implants", description: "Biocompatible titanium implants and lifelike crowns." },
   { id: "pediatric", name: "Pediatric Dentistry", description: "Gentle, fear-free treatments tailored for young children." },
   { id: "emergency", name: "Emergency Care", description: "Immediate treatment for severe pain, tooth fractures, or trauma." },
-];
-
-const dentists = [
-  { id: "jagjeet", name: "Dr. Jagjeet Singh", specialty: "Prosthodontist - Smile Rehabilitation", treatmentIds: ["cosmetic", "implants"] },
-  { id: "varun", name: "Dr. Varun Ahuja", specialty: "Orthodontist - Braces & Aligners", treatmentIds: ["ortho"] },
-  { id: "nitish", name: "Dr. Nitish Goyal", specialty: "Endodontist - Root Canal Specialist", treatmentIds: ["emergency"] },
-  { id: "manisha", name: "Dr. Manisha", specialty: "BDS - General & Preventive Dentistry", treatmentIds: ["general", "pediatric"] },
 ];
 
 // Helper to format date
@@ -47,8 +67,9 @@ function BookingWizardContent() {
   const [isPending, startTransition] = useTransition();
 
   const [step, setStep] = useState<Step>("treatment");
+  // +1 = advancing, -1 = going back — drives the directional panel slide.
+  const [direction, setDirection] = useState(1);
   const [selectedTreatment, setSelectedTreatment] = useState<string>("");
-  const [selectedDentist, setSelectedDentist] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
   
@@ -57,6 +78,7 @@ function BookingWizardContent() {
   const [patientEmail, setPatientEmail] = useState("");
   const [patientPhone, setPatientPhone] = useState("");
   const [patientNotes, setPatientNotes] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   
   // Slots and booking state
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
@@ -70,12 +92,8 @@ function BookingWizardContent() {
     const tParam = searchParams.get("treatment");
     if (tParam && treatments.some((t) => t.id === tParam)) {
       setSelectedTreatment(tParam);
-      // Auto-suggest dentist
-      const suggestedDentist = dentists.find((d) => d.treatmentIds.includes(tParam));
-      if (suggestedDentist) {
-        setSelectedDentist(suggestedDentist.name);
-      }
-      setStep("dentist");
+      setDirection(1);
+      setStep("date");
     }
   }, [searchParams]);
 
@@ -108,69 +126,87 @@ function BookingWizardContent() {
     }
   }
 
-  const handleTreatmentSelect = (id: string) => {
-    setSelectedTreatment(id);
-    // Find the primary specialist for this treatment to pre-select
-    const specialist = dentists.find((d) => d.treatmentIds.includes(id));
-    if (specialist) {
-      setSelectedDentist(specialist.name);
-    } else {
-      setSelectedDentist(dentists[0].name);
-    }
-    setStep("dentist");
+  // Single entry point for step changes so the slide direction stays correct.
+  const goToStep = (next: Step) => {
+    setDirection(stepsOrder.indexOf(next) >= stepsOrder.indexOf(step) ? 1 : -1);
+    setStep(next);
   };
 
-  const handleDentistSelect = (name: string) => {
-    setSelectedDentist(name);
-    setStep("date");
+  const handleTreatmentSelect = (id: string) => {
+    setSelectedTreatment(id);
+    goToStep("date");
   };
 
   const handleDateSelect = (dateStr: string) => {
     setSelectedDate(dateStr);
-    setStep("time");
+    goToStep("time");
   };
 
   const handleTimeSelect = (timeStr: string) => {
     setSelectedTime(timeStr);
-    setStep("details");
+    goToStep("details");
   };
 
   const handleBack = () => {
     const currentIndex = stepsOrder.indexOf(step);
     if (currentIndex > 0) {
-      setStep(stepsOrder[currentIndex - 1]);
+      goToStep(stepsOrder[currentIndex - 1]);
     }
+  };
+
+  const validateDetails = (): FieldErrors => {
+    const errs: FieldErrors = {};
+    if (!patientName.trim()) errs.name = "Please enter your full name.";
+
+    const email = patientEmail.trim();
+    if (!email) errs.email = "Please enter your email address.";
+    else if (!EMAIL_RE.test(email)) errs.email = "Enter a valid email address.";
+
+    const phoneDigits = patientPhone.replace(/\D/g, "");
+    if (!patientPhone.trim()) errs.phone = "Please enter your phone number.";
+    else if (phoneDigits.length < 7) errs.phone = "Enter a valid phone number.";
+
+    return errs;
+  };
+
+  const clearFieldError = (field: keyof FieldErrors) => {
+    setFieldErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!patientName || !patientEmail || !patientPhone) {
-      setBookingError("Please fill out all required fields.");
-      return;
-    }
+
+    // Strict, per-field validation — no submit with missing/invalid contact info.
+    const errs = validateDetails();
+    setFieldErrors(errs);
+    if (Object.keys(errs).length > 0) return;
 
     setBookingError(null);
     const treatmentObj = treatments.find((t) => t.id === selectedTreatment);
     const details: BookingDetails = {
       treatmentId: selectedTreatment,
       treatmentName: treatmentObj?.name || selectedTreatment,
-      dentistName: selectedDentist,
       date: selectedDate,
       time: selectedTime,
-      patientName,
-      patientEmail,
-      patientPhone,
-      notes: patientNotes,
+      patientName: patientName.trim(),
+      patientEmail: patientEmail.trim(),
+      patientPhone: patientPhone.trim(),
+      notes: patientNotes.trim(),
     };
 
     startTransition(async () => {
-      const res = await createBooking(details);
-      if (res.success) {
-        setBookedDetails(details);
-        setIsMocked(!!res.mocked);
-        setStep("confirmation");
-      } else {
-        setBookingError(res.error || "Something went wrong while booking. Please try again.");
+      try {
+        const res = await createBooking(details);
+        if (res.success) {
+          setBookedDetails(details);
+          setIsMocked(!!res.mocked);
+          goToStep("confirmation");
+        } else {
+          setBookingError(res.error || "Something went wrong while booking. Please try again.");
+        }
+      } catch (err) {
+        console.error("Booking request failed:", err);
+        setBookingError("We couldn't reach the booking service. Please check your connection and try again.");
       }
     });
   };
@@ -178,11 +214,19 @@ function BookingWizardContent() {
   const currentStepIndex = stepsOrder.indexOf(step);
   const progressPercent = Math.min(((currentStepIndex + 1) / (stepsOrder.length - 1)) * 100, 100);
 
-  // Direction animation helper
+  // Weighted, direction-aware panel slide with spring physics.
   const slideVariants = {
-    enter: { opacity: 0, x: 20 },
-    center: { opacity: 1, x: 0, transition: reduceMotion ? { duration: 0 } : transitions.base },
-    exit: { opacity: 0, x: -20, transition: reduceMotion ? { duration: 0 } : transitions.base },
+    enter: (dir: number) => ({ opacity: 0, x: dir >= 0 ? 56 : -56 }),
+    center: {
+      opacity: 1,
+      x: 0,
+      transition: reduceMotion ? { duration: 0 } : springs.panel,
+    },
+    exit: (dir: number) => ({
+      opacity: 0,
+      x: dir >= 0 ? -56 : 56,
+      transition: reduceMotion ? { duration: 0 } : springs.panel,
+    }),
   };
 
   return (
@@ -192,7 +236,7 @@ function BookingWizardContent() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <span className="text-eyebrow text-clinic-teal dark:text-clinic-teal-soft">
-              Step {currentStepIndex + 1} of 5
+              Step {currentStepIndex + 1} of {stepsOrder.length - 1}
             </span>
             <span className="text-body-sm font-semibold capitalize text-foreground">
               {step === "details" ? "Patient Information" : step}
@@ -211,11 +255,12 @@ function BookingWizardContent() {
 
       {/* BookingWizard Steps container */}
       <div className="relative min-h-[22rem] overflow-hidden">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={direction}>
           {step === "treatment" && (
             <motion.div
               key="treatment"
               variants={slideVariants}
+              custom={direction}
               initial="enter"
               animate="center"
               exit="exit"
@@ -229,73 +274,40 @@ function BookingWizardContent() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                {treatments.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => handleTreatmentSelect(t.id)}
-                    className={`flex flex-col items-start gap-2 rounded-card border p-5 text-left transition-[border-color,box-shadow] duration-[var(--duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clinic-teal hover:border-clinic-teal/30 hover:shadow-soft dark:hover:border-clinic-teal-soft/30 ${
-                      selectedTreatment === t.id
-                        ? "border-clinic-teal bg-clinic-teal/5 ring-1 ring-clinic-teal dark:border-clinic-teal-soft dark:bg-clinic-teal-soft/5"
-                        : "border-deep-charcoal/5 dark:border-white/5"
-                    }`}
-                  >
-                    <span className="text-body-sm font-semibold text-foreground">{t.name}</span>
-                    <span className="text-xs text-muted leading-relaxed">{t.description}</span>
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {step === "dentist" && (
-            <motion.div
-              key="dentist"
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="space-y-6"
-            >
-              <div className="text-center sm:text-left">
-                <h2 className="text-heading-2">Choose a Dentist</h2>
-                <p className="mt-2 text-body-sm text-muted">
-                  Select a dentist or proceed with our recommended specialist.
-                </p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                {dentists.map((d) => {
-                  const isSpecialist = selectedTreatment ? d.treatmentIds.includes(selectedTreatment) : false;
+                {treatments.map((t) => {
+                  const isSelected = selectedTreatment === t.id;
                   return (
-                    <button
-                      key={d.id}
-                      onClick={() => handleDentistSelect(d.name)}
-                      className={`relative flex flex-col items-start gap-2 rounded-card border p-5 text-left transition-[border-color,box-shadow] duration-[var(--duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clinic-teal hover:border-clinic-teal/30 hover:shadow-soft dark:hover:border-clinic-teal-soft/30 ${
-                        selectedDentist === d.name
-                          ? "border-clinic-teal bg-clinic-teal/5 ring-1 ring-clinic-teal dark:border-clinic-teal-soft dark:bg-clinic-teal-soft/5"
-                          : "border-deep-charcoal/5 dark:border-white/5"
+                    <motion.button
+                      key={t.id}
+                      type="button"
+                      onClick={() => handleTreatmentSelect(t.id)}
+                      whileHover={reduceMotion ? undefined : { scale: 1.015 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.96 }}
+                      transition={springs.press}
+                      aria-pressed={isSelected}
+                      className={`flex flex-col items-start gap-2 rounded-card border p-5 text-left transition-colors duration-[var(--duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clinic-teal ${
+                        isSelected
+                          ? "border-clinic-teal bg-clinic-teal ring-1 ring-clinic-teal dark:border-clinic-teal-soft dark:bg-clinic-teal-soft"
+                          : "border-deep-charcoal/5 hover:border-clinic-teal/30 dark:border-white/5 dark:hover:border-clinic-teal-soft/30"
                       }`}
                     >
-                      {isSpecialist && (
-                        <span className="absolute right-4 top-4 rounded-pill bg-clinic-teal/10 px-2 py-0.5 text-[0.625rem] font-semibold text-clinic-teal dark:bg-clinic-teal-soft/10 dark:text-clinic-teal-soft">
-                          Specialist
-                        </span>
-                      )}
-                      <span className="text-body-sm font-semibold text-foreground">{d.name}</span>
-                      <span className="text-xs text-muted leading-relaxed">{d.specialty}</span>
-                    </button>
+                      <span
+                        className={`text-body-sm font-semibold ${
+                          isSelected ? "text-white dark:text-deep-charcoal" : "text-foreground"
+                        }`}
+                      >
+                        {t.name}
+                      </span>
+                      <span
+                        className={`text-xs leading-relaxed ${
+                          isSelected ? "text-white/80 dark:text-deep-charcoal/75" : "text-muted"
+                        }`}
+                      >
+                        {t.description}
+                      </span>
+                    </motion.button>
                   );
                 })}
-              </div>
-
-              <div className="flex justify-start">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 dark:text-clinic-teal-soft"
-                >
-                  &larr; Back to treatments
-                </button>
               </div>
             </motion.div>
           )}
@@ -304,6 +316,7 @@ function BookingWizardContent() {
             <motion.div
               key="date"
               variants={slideVariants}
+              custom={direction}
               initial="enter"
               animate="center"
               exit="exit"
@@ -321,10 +334,14 @@ function BookingWizardContent() {
                   const formatted = formatDateStr(date);
                   const label = formatDateLabel(date);
                   return (
-                    <button
+                    <motion.button
                       key={formatted}
+                      type="button"
                       onClick={() => handleDateSelect(formatted)}
-                      className={`flex flex-col items-center justify-center rounded-card border py-4 text-center transition-all duration-[var(--duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clinic-teal hover:border-clinic-teal/30 hover:shadow-soft dark:hover:border-clinic-teal-soft/30 ${
+                      whileHover={reduceMotion ? undefined : { scale: 1.03 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.95 }}
+                      transition={springs.press}
+                      className={`flex flex-col items-center justify-center rounded-card border py-4 text-center transition-colors duration-[var(--duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clinic-teal hover:border-clinic-teal/30 dark:hover:border-clinic-teal-soft/30 ${
                         selectedDate === formatted
                           ? "border-clinic-teal bg-clinic-teal/5 ring-1 ring-clinic-teal dark:border-clinic-teal-soft dark:bg-clinic-teal-soft/5"
                           : "border-deep-charcoal/5 dark:border-white/5"
@@ -334,7 +351,7 @@ function BookingWizardContent() {
                       <span className="mt-1 text-body-sm font-semibold text-foreground">
                         {label.split(",")[1]}
                       </span>
-                    </button>
+                    </motion.button>
                   );
                 })}
               </div>
@@ -345,7 +362,7 @@ function BookingWizardContent() {
                   onClick={handleBack}
                   className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 dark:text-clinic-teal-soft"
                 >
-                  &larr; Back to dentists
+                  &larr; Back to treatments
                 </button>
               </div>
             </motion.div>
@@ -355,6 +372,7 @@ function BookingWizardContent() {
             <motion.div
               key="time"
               variants={slideVariants}
+              custom={direction}
               initial="enter"
               animate="center"
               exit="exit"
@@ -380,17 +398,21 @@ function BookingWizardContent() {
               ) : (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {availableSlots.map((tSlot) => (
-                    <button
+                    <motion.button
                       key={tSlot}
+                      type="button"
                       onClick={() => handleTimeSelect(tSlot)}
-                      className={`rounded-pill border py-3.5 text-center text-body-sm font-semibold transition-all duration-[var(--duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clinic-teal hover:border-clinic-teal/30 hover:shadow-soft dark:hover:border-clinic-teal-soft/30 ${
+                      whileHover={reduceMotion ? undefined : { scale: 1.03 }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.95 }}
+                      transition={springs.press}
+                      className={`rounded-pill border py-3.5 text-center text-body-sm font-semibold transition-colors duration-[var(--duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clinic-teal hover:border-clinic-teal/30 dark:hover:border-clinic-teal-soft/30 ${
                         selectedTime === tSlot
                           ? "border-clinic-teal bg-clinic-teal text-white dark:border-clinic-teal-soft dark:bg-clinic-teal-soft dark:text-deep-charcoal"
                           : "border-deep-charcoal/5 bg-background text-foreground/80 dark:border-white/5"
                       }`}
                     >
                       {tSlot}
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
               )}
@@ -411,6 +433,7 @@ function BookingWizardContent() {
             <motion.div
               key="details"
               variants={slideVariants}
+              custom={direction}
               initial="enter"
               animate="center"
               exit="exit"
@@ -423,7 +446,7 @@ function BookingWizardContent() {
                 </p>
               </div>
 
-              <form onSubmit={handleFormSubmit} className="space-y-4">
+              <form onSubmit={handleFormSubmit} noValidate className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="flex flex-col">
                     <label htmlFor="name" className="text-xs font-semibold text-foreground">
@@ -433,11 +456,21 @@ function BookingWizardContent() {
                       type="text"
                       id="name"
                       required
+                      aria-invalid={!!fieldErrors.name}
+                      aria-describedby={fieldErrors.name ? "name-error" : undefined}
                       value={patientName}
-                      onChange={(e) => setPatientName(e.target.value)}
+                      onChange={(e) => {
+                        setPatientName(e.target.value);
+                        clearFieldError("name");
+                      }}
                       placeholder="Sarah Jenkins"
-                      className="mt-2 rounded-button border border-deep-charcoal/10 bg-background px-4 py-2.5 text-body-sm text-foreground focus:border-clinic-teal focus:outline-none focus:ring-1 focus:ring-clinic-teal dark:border-white/10"
+                      className={`mt-2 rounded-button border bg-background px-4 py-2.5 text-body-sm text-foreground focus:outline-none focus:ring-1 ${
+                        fieldErrors.name
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                          : "border-deep-charcoal/10 focus:border-clinic-teal focus:ring-clinic-teal dark:border-white/10"
+                      }`}
                     />
+                    <FieldError id="name-error" message={fieldErrors.name} />
                   </div>
                   <div className="flex flex-col">
                     <label htmlFor="email" className="text-xs font-semibold text-foreground">
@@ -447,11 +480,21 @@ function BookingWizardContent() {
                       type="email"
                       id="email"
                       required
+                      aria-invalid={!!fieldErrors.email}
+                      aria-describedby={fieldErrors.email ? "email-error" : undefined}
                       value={patientEmail}
-                      onChange={(e) => setPatientEmail(e.target.value)}
+                      onChange={(e) => {
+                        setPatientEmail(e.target.value);
+                        clearFieldError("email");
+                      }}
                       placeholder="sarah@example.com"
-                      className="mt-2 rounded-button border border-deep-charcoal/10 bg-background px-4 py-2.5 text-body-sm text-foreground focus:border-clinic-teal focus:outline-none focus:ring-1 focus:ring-clinic-teal dark:border-white/10"
+                      className={`mt-2 rounded-button border bg-background px-4 py-2.5 text-body-sm text-foreground focus:outline-none focus:ring-1 ${
+                        fieldErrors.email
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                          : "border-deep-charcoal/10 focus:border-clinic-teal focus:ring-clinic-teal dark:border-white/10"
+                      }`}
                     />
+                    <FieldError id="email-error" message={fieldErrors.email} />
                   </div>
                 </div>
 
@@ -463,11 +506,21 @@ function BookingWizardContent() {
                     type="tel"
                     id="phone"
                     required
+                    aria-invalid={!!fieldErrors.phone}
+                    aria-describedby={fieldErrors.phone ? "phone-error" : undefined}
                     value={patientPhone}
-                    onChange={(e) => setPatientPhone(e.target.value)}
+                    onChange={(e) => {
+                      setPatientPhone(e.target.value);
+                      clearFieldError("phone");
+                    }}
                     placeholder="+1 (555) 012-3456"
-                    className="mt-2 rounded-button border border-deep-charcoal/10 bg-background px-4 py-2.5 text-body-sm text-foreground focus:border-clinic-teal focus:outline-none focus:ring-1 focus:ring-clinic-teal dark:border-white/10"
+                    className={`mt-2 rounded-button border bg-background px-4 py-2.5 text-body-sm text-foreground focus:outline-none focus:ring-1 ${
+                      fieldErrors.phone
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : "border-deep-charcoal/10 focus:border-clinic-teal focus:ring-clinic-teal dark:border-white/10"
+                    }`}
                   />
+                  <FieldError id="phone-error" message={fieldErrors.phone} />
                 </div>
 
                 <div className="flex flex-col">
@@ -484,9 +537,21 @@ function BookingWizardContent() {
                   />
                 </div>
 
-                {bookingError && (
-                  <p className="text-body-sm font-medium text-red-500">{bookingError}</p>
-                )}
+                <AnimatePresence initial={false}>
+                  {bookingError && (
+                    <motion.p
+                      key="booking-error"
+                      role="alert"
+                      initial={{ opacity: 0, height: 0, y: -4 }}
+                      animate={{ opacity: 1, height: "auto", y: 0 }}
+                      exit={{ opacity: 0, height: 0, y: -4 }}
+                      transition={reduceMotion ? { duration: 0 } : { ...springs.press, opacity: { duration: 0.15 } }}
+                      className="overflow-hidden rounded-button border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-body-sm font-medium text-red-500"
+                    >
+                      {bookingError}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
 
                 <div className="flex items-center justify-between pt-4">
                   <button
@@ -520,12 +585,18 @@ function BookingWizardContent() {
             <motion.div
               key="confirmation"
               variants={slideVariants}
+              custom={direction}
               initial="enter"
               animate="center"
               exit="exit"
               className="flex flex-col items-center text-center space-y-6"
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-clinic-teal/10 text-clinic-teal dark:bg-clinic-teal-soft/10 dark:text-clinic-teal-soft">
+              <motion.div
+                initial={reduceMotion ? { scale: 1 } : { scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 18, delay: 0.1 }}
+                className="flex h-16 w-16 items-center justify-center rounded-full bg-clinic-teal/10 text-clinic-teal dark:bg-clinic-teal-soft/10 dark:text-clinic-teal-soft"
+              >
                 <svg
                   viewBox="0 0 24 24"
                   className="h-8 w-8"
@@ -536,9 +607,14 @@ function BookingWizardContent() {
                   strokeLinejoin="round"
                   aria-hidden="true"
                 >
-                  <polyline points="20 6 9 17 4 12" />
+                  <motion.polyline
+                    points="20 6 9 17 4 12"
+                    initial={reduceMotion ? { pathLength: 1 } : { pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={reduceMotion ? { duration: 0 } : { duration: 0.4, ease: "easeOut", delay: 0.35 }}
+                  />
                 </svg>
-              </div>
+              </motion.div>
 
               <div>
                 <h2 className="text-heading-2">Appointment Scheduled!</h2>
@@ -557,10 +633,6 @@ function BookingWizardContent() {
                   <div className="flex justify-between">
                     <dt className="text-muted">Treatment:</dt>
                     <dd className="font-semibold text-foreground">{bookedDetails.treatmentName}</dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-muted">Dentist:</dt>
-                    <dd className="font-semibold text-foreground">{bookedDetails.dentistName}</dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-muted">Date:</dt>
@@ -591,7 +663,6 @@ function BookingWizardContent() {
                   onClick={() => {
                     // Reset wizard state to allow a new booking
                     setSelectedTreatment("");
-                    setSelectedDentist("");
                     setSelectedDate("");
                     setSelectedTime("");
                     setPatientName("");
@@ -599,7 +670,9 @@ function BookingWizardContent() {
                     setPatientPhone("");
                     setPatientNotes("");
                     setBookedDetails(null);
-                    setStep("treatment");
+                    setFieldErrors({});
+                    setBookingError(null);
+                    goToStep("treatment");
                   }}
                   className="rounded-pill bg-clinic-teal px-6 py-3.5 text-body-sm font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
                 >

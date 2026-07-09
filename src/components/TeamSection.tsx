@@ -35,13 +35,13 @@ export default function TeamSection() {
 
   return (
     <section className="bg-surface py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-gutter">
         <div className="mx-auto max-w-2xl text-center mb-16 md:mb-24">
           <h2 className="text-heading-1 mb-6 text-clinic-teal">
             Meet The Specialists Behind Your Smile
           </h2>
           <p className="text-body-lg text-muted max-w-2xl mx-auto">
-            At Dencity Dental Care, you don't need referrals. Our in-house experts bring advanced care together under one roof in Suratgarh.
+            At Dencity Dental Care, you don’t need referrals. Our in-house experts bring advanced care together under one roof in Suratgarh.
           </p>
         </div>
 

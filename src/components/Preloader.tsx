@@ -1,27 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-
-const greetings = ["Olá", "Hallo", "Hello", "やあ"];
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function Preloader() {
-  const [index, setIndex] = useState(0);
   const [showPreloader, setShowPreloader] = useState(true);
+  const [dissolve, setDissolve] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (index < greetings.length - 1) {
-      const timer = setTimeout(() => {
-        setIndex(index + 1);
-      }, 300); // Adjust speed of text cycle
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => {
-        setShowPreloader(false);
-      }, 800); // Pause on the last greeting before sliding up
-      return () => clearTimeout(timer);
-    }
-  }, [index]);
+    // Draw settles → dissolve the smile → slide the whole curtain away.
+    const dissolveAt = reduceMotion ? 500 : 1650;
+    const hideAt = reduceMotion ? 900 : 2200;
+
+    const t1 = setTimeout(() => setDissolve(true), dissolveAt);
+    const t2 = setTimeout(() => setShowPreloader(false), hideAt);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [reduceMotion]);
 
   return (
     <AnimatePresence>
@@ -33,20 +31,30 @@ export default function Preloader() {
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-deep-charcoal"
         >
-          <div className="overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={index}
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: -50, opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="text-4xl md:text-6xl font-serif text-white font-medium tracking-wide"
-              >
-                {greetings[index]}
-              </motion.h1>
-            </AnimatePresence>
-          </div>
+          <motion.svg
+            width="200"
+            height="150"
+            viewBox="0 0 200 150"
+            fill="none"
+            aria-hidden
+            animate={{ opacity: dissolve ? 0 : 1, scale: dissolve ? 1.08 : 1 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {/* Minimalist smile — drawn with spring physics for an organic settle. */}
+            <motion.path
+              d="M35 70 Q100 145 165 70"
+              stroke="#ffffff"
+              strokeWidth={9}
+              strokeLinecap="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: reduceMotion ? 1 : [0, 1] }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 42, damping: 13, mass: 1 }
+              }
+            />
+          </motion.svg>
         </motion.div>
       )}
     </AnimatePresence>

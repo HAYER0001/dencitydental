@@ -23,14 +23,12 @@ import {
 
 import Container from "@/components/layout/Container";
 // 1. Extreme Server Isolation: Import server actions to handle secure endpoints
-import { checkAvailability, createBooking, type BookingDetails } from "@/app/book/actions";
+import { checkAvailability, createBooking } from "@/app/book/actions";
 
 // Types
 export type BookingData = {
   treatmentId: string;
   treatmentName: string;
-  dentistId: string;
-  dentistName: string;
   date: string; // YYYY-MM-DD
   timeSlot: string;
   patientName: string;
@@ -39,6 +37,8 @@ export type BookingData = {
   patientNotes: string;
 };
 
+type BookingStep = 1 | 2 | 3 | 4 | 5 | 6;
+
 const treatments = [
   { id: "general", name: "General Dentistry", description: "Routine exams, scale, clean, and fillings.", icon: Shield },
   { id: "cosmetic", name: "Cosmetic Dentistry", description: "Veneers, whitening, and aesthetic bonding.", icon: Sparkles },
@@ -46,13 +46,6 @@ const treatments = [
   { id: "implants", name: "Dental Implants", description: "Biocompatible implants and custom crowns.", icon: Layers },
   { id: "pediatric", name: "Pediatric Dentistry", description: "Gentle, fear-free treatments for children.", icon: Smile },
   { id: "emergency", name: "Emergency Care", description: "Same-day treatment for acute pain or trauma.", icon: HeartPulse },
-];
-
-const dentists = [
-  { id: "maya", name: "Dr. Maya Sharma", specialty: "Cosmetic & Restorative Dentistry", qualification: "BDS, MDS (Prosthodontics)" },
-  { id: "arjun", name: "Dr. Arjun Mehta", specialty: "Orthodontics & Clear Aligners", qualification: "BDS, MDS (Orthodontics)" },
-  { id: "elena", name: "Dr. Elena Rodrigues", specialty: "Pediatric Dentistry", qualification: "BDS, PG Dip (Paediatric Dentistry)" },
-  { id: "daniel", name: "Dr. Daniel Okafor", specialty: "Implants & Oral Surgery", qualification: "BDS, MDS (Oral Surgery)" },
 ];
 
 function formatDateLabel(dateStr: string): string {
@@ -68,15 +61,13 @@ function BookPageContent() {
   const [mounted, setMounted] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  // 1. Flow Architecture State Machine (Steps 1 to 6)
-  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
+  // 1. Flow Architecture State Machine (Steps 1 to 6, where 6 = success)
+  const [step, setStep] = useState<BookingStep>(1);
 
   // 2. State Security: Single unified state object keeping all inputs intact
   const [formData, setFormData] = useState<BookingData>({
     treatmentId: "",
     treatmentName: "",
-    dentistId: "",
-    dentistName: "",
     date: "",
     timeSlot: "",
     patientName: "",
@@ -110,22 +101,7 @@ function BookPageContent() {
         treatmentId: tParam,
         treatmentName: selectedT?.name || "",
       }));
-      // Autoselect dentist specialist
-      const specialist = dentists.find((d) => {
-        if (tParam === "cosmetic" || tParam === "general") return d.id === "maya";
-        if (tParam === "ortho") return d.id === "arjun";
-        if (tParam === "pediatric") return d.id === "elena";
-        if (tParam === "implants" || tParam === "emergency") return d.id === "daniel";
-        return false;
-      });
-      if (specialist) {
-        setFormData((prev) => ({
-          ...prev,
-          dentistId: specialist.id,
-          dentistName: specialist.name,
-        }));
-      }
-      setStep(3); // Jump straight to date selection
+      setStep(2); // Jump straight to date selection
     }
   }, [searchParams, mounted]);
 
@@ -171,12 +147,11 @@ function BookPageContent() {
 
   const handleNext = () => {
     if (step === 1 && !formData.treatmentId) return;
-    if (step === 2 && !formData.dentistId) return;
-    if (step === 3 && !formData.date) return;
-    if (step === 4 && !formData.timeSlot) return;
+    if (step === 2 && !formData.date) return;
+    if (step === 3 && !formData.timeSlot) return;
 
-    if (step === 5) {
-      // 3. Client-Side Validation on Step 5 before moving to Step 6
+    if (step === 4) {
+      // Client-Side Validation on Patient Details before moving to Review
       if (!formData.patientName.trim()) {
         setValidationError("Full Name is required.");
         return;
@@ -197,22 +172,36 @@ function BookPageContent() {
       setValidationError(null);
     }
 
-    setStep((prev) => (prev + 1) as any);
+    setStep((prev) => Math.min(prev + 1, 6) as BookingStep);
   };
 
   const handleBack = () => {
-    setStep((prev) => (prev - 1) as any);
+    setStep((prev) => Math.max(prev - 1, 1) as BookingStep);
   };
 
   // 3. Automatic Scheduling Action: Insert event into Google Calendar
   const handleConfirmSubmit = () => {
     setValidationError(null);
+
+    // Strict final-payload validation before hitting the server action.
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (
+      !formData.treatmentId ||
+      !formData.date ||
+      !formData.timeSlot ||
+      !formData.patientName.trim() ||
+      !emailRegex.test(formData.patientEmail) ||
+      formData.patientPhone.replace(/\D/g, "").length < 7
+    ) {
+      setValidationError("Some required details are missing or invalid. Please review your entries.");
+      return;
+    }
+
     startTransition(async () => {
       try {
         const res = await createBooking({
           treatmentId: formData.treatmentId,
           treatmentName: formData.treatmentName,
-          dentistName: formData.dentistName,
           date: formData.date,
           time: formData.timeSlot,
           patientName: formData.patientName,
@@ -222,19 +211,19 @@ function BookPageContent() {
         });
 
         if (res.success) {
-          setStep(7);
+          setStep(6);
         } else {
           // Handle API blocks/dropouts gracefully
           setValidationError(res.error || "Failed to schedule appointment. Please try again.");
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error("Booking submission error:", err);
         setValidationError("A network error occurred. Please verify your connection.");
       }
     });
   };
 
-  const stepProgress = ((step - 1) / 5) * 100;
+  const stepProgress = ((step - 1) / 4) * 100;
 
   // Partition available slots into morning / afternoon
   const morningAvailable = availableSlots.filter((slot) => slot.endsWith("AM"));
@@ -246,7 +235,7 @@ function BookPageContent() {
       <div aria-hidden="true" className="absolute -top-12 left-1/2 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-[#0A5C5C]/5 blur-3xl pointer-events-none" />
 
       <Container className="flex flex-col items-center">
-        {step < 7 && (
+        {step < 6 && (
           <div className="max-w-xl text-center mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-[#0F1717]">Book an Appointment</h1>
             <p className="mt-2 text-sm text-[#0F1717]/70 leading-relaxed">
@@ -255,20 +244,19 @@ function BookPageContent() {
           </div>
         )}
 
-        <div className="w-full max-w-2xl rounded-[1.25rem] border border-[#0F1717]/5 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,23,0.05),0_4px_12px_rgba(15,23,23,0.06)] dark:border-white/10 sm:p-10">
+        <div className="w-full max-w-2xl rounded-none border border-[#0F1717]/5 bg-white p-6 shadow-none dark:border-white/10 sm:p-10">
           
           {/* Progress Indicators */}
-          {step < 7 && (
+          {step < 6 && (
             <div className="mb-8">
               <div className="flex items-center justify-between text-xs font-semibold text-[#0A5C5C] uppercase tracking-wider">
-                <span>Step {step} of 6</span>
+                <span>Step {step} of 5</span>
                 <span className="text-[#0F1717]/60">
                   {step === 1 && "Treatment"}
-                  {step === 2 && "Dentist"}
-                  {step === 3 && "Date"}
-                  {step === 4 && "Time Slot"}
-                  {step === 5 && "Patient Details"}
-                  {step === 6 && "Review & Confirm"}
+                  {step === 2 && "Date"}
+                  {step === 3 && "Time Slot"}
+                  {step === 4 && "Patient Details"}
+                  {step === 5 && "Review & Confirm"}
                 </span>
               </div>
               <div className="mt-3 h-1 w-full bg-[#0F1717]/5 rounded-full overflow-hidden">
@@ -304,7 +292,7 @@ function BookPageContent() {
                           key={t.id}
                           type="button"
                           onClick={() => setFormData((prev) => ({ ...prev, treatmentId: t.id, treatmentName: t.name }))}
-                          className={`flex items-start gap-4 rounded-[1rem] border p-5 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] hover:border-[#0A5C5C]/30 hover:shadow-[0_2px_8px_rgba(10,92,92,0.05)] ${
+                          className={`flex items-start gap-4 rounded-none border p-5 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] hover:border-[#0A5C5C]/30 hover:shadow-none ${
                             isSelected
                               ? "border-[#0A5C5C] bg-[#0A5C5C]/5 ring-1 ring-[#0A5C5C]"
                               : "border-[#0F1717]/5"
@@ -343,59 +331,6 @@ function BookPageContent() {
                   className="space-y-6"
                 >
                   <div>
-                    <h2 className="text-xl font-bold text-[#0F1717]">Choose a Dentist</h2>
-                    <p className="text-xs text-[#0F1717]/60 mt-1">Select a practitioner or our specialist recommendation.</p>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {dentists.map((d) => {
-                      const isSelected = formData.dentistId === d.id;
-                      return (
-                        <button
-                          key={d.id}
-                          type="button"
-                          onClick={() => setFormData((prev) => ({ ...prev, dentistId: d.id, dentistName: d.name }))}
-                          className={`flex flex-col items-start gap-1 rounded-[1rem] border p-5 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] hover:border-[#0A5C5C]/30 hover:shadow-[0_2px_8px_rgba(10,92,92,0.05)] ${
-                            isSelected
-                              ? "border-[#0A5C5C] bg-[#0A5C5C]/5 ring-1 ring-[#0A5C5C]"
-                              : "border-[#0F1717]/5"
-                          }`}
-                        >
-                          <span className="text-sm font-semibold text-[#0F1717]">{d.name}</span>
-                          <span className="text-xs text-[#0A5C5C] font-medium">{d.specialty}</span>
-                          <span className="text-[0.7rem] text-[#0F1717]/55 mt-2 leading-relaxed">{d.qualification}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <div className="flex justify-between pt-4">
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline"
-                    >
-                      <ChevronLeft className="h-4 w-4" /> Back
-                    </button>
-                    <button
-                      type="button"
-                      disabled={!formData.dentistId}
-                      onClick={handleNext}
-                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
-                    >
-                      Next Step <ChevronRight className="h-4 w-4" />
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-
-              {step === 3 && (
-                <motion.div
-                  key="step3"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  className="space-y-6"
-                >
-                  <div>
                     <h2 className="text-xl font-bold text-[#0F1717]">Select a Date</h2>
                     <p className="text-xs text-[#0F1717]/60 mt-1">Available dates for the next two weeks.</p>
                   </div>
@@ -414,7 +349,7 @@ function BookPageContent() {
                           key={dateStr}
                           type="button"
                           onClick={() => setFormData((prev) => ({ ...prev, date: dateStr }))}
-                          className={`flex flex-col items-center justify-center rounded-[1rem] border py-4 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] hover:border-[#0A5C5C]/30 hover:shadow-[0_2px_8px_rgba(10,92,92,0.05)] ${
+                          className={`flex flex-col items-center justify-center rounded-none border py-4 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] hover:border-[#0A5C5C]/30 hover:shadow-none ${
                             isSelected
                               ? "border-[#0A5C5C] bg-[#0A5C5C]/5 ring-1 ring-[#0A5C5C]"
                               : "border-[#0F1717]/5"
@@ -451,9 +386,9 @@ function BookPageContent() {
                 </motion.div>
               )}
 
-              {step === 4 && (
+              {step === 3 && (
                 <motion.div
-                  key="step4"
+                  key="step3"
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
@@ -477,7 +412,7 @@ function BookPageContent() {
                       {slotError}
                     </div>
                   ) : availableSlots.length === 0 ? (
-                    <div className="flex h-32 flex-col items-center justify-center gap-2 rounded-[1rem] border border-dashed border-[#0F1717]/10 p-6 text-center">
+                    <div className="flex h-32 flex-col items-center justify-center gap-2 rounded-none border border-dashed border-[#0F1717]/10 p-6 text-center">
                       <span className="text-xs font-bold text-[#0F1717]">No slots available</span>
                       <span className="text-[0.7rem] text-[#0F1717]/55">Please choose another date.</span>
                     </div>
@@ -555,9 +490,9 @@ function BookPageContent() {
                 </motion.div>
               )}
 
-              {step === 5 && (
+              {step === 4 && (
                 <motion.div
-                  key="step5"
+                  key="step4"
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
@@ -580,7 +515,7 @@ function BookPageContent() {
                           value={formData.patientName}
                           onChange={(e) => setFormData((prev) => ({ ...prev, patientName: e.target.value }))}
                           placeholder="Sarah Jenkins"
-                          className="mt-2 rounded-[0.625rem] border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
+                          className="mt-2 rounded-none border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
                         />
                       </div>
                       <div className="flex flex-col">
@@ -593,7 +528,7 @@ function BookPageContent() {
                           value={formData.patientEmail}
                           onChange={(e) => setFormData((prev) => ({ ...prev, patientEmail: e.target.value }))}
                           placeholder="sarah@example.com"
-                          className="mt-2 rounded-[0.625rem] border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
+                          className="mt-2 rounded-none border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
                         />
                       </div>
                     </div>
@@ -608,7 +543,7 @@ function BookPageContent() {
                         value={formData.patientPhone}
                         onChange={(e) => setFormData((prev) => ({ ...prev, patientPhone: e.target.value }))}
                         placeholder="+1 (555) 012-3456"
-                        className="mt-2 rounded-[0.625rem] border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
+                        className="mt-2 rounded-none border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
                       />
                     </div>
 
@@ -622,7 +557,7 @@ function BookPageContent() {
                         value={formData.patientNotes}
                         onChange={(e) => setFormData((prev) => ({ ...prev, patientNotes: e.target.value }))}
                         placeholder="Please specify if you have any sensitivities or specific requests."
-                        className="mt-2 rounded-[0.625rem] border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
+                        className="mt-2 rounded-none border border-[#0F1717]/10 bg-white px-4 py-2.5 text-xs text-[#0F1717] focus:border-[#0A5C5C] focus:outline-none focus:ring-1 focus:ring-[#0A5C5C]"
                       />
                     </div>
 
@@ -650,9 +585,9 @@ function BookPageContent() {
                 </motion.div>
               )}
 
-              {step === 6 && (
+              {step === 5 && (
                 <motion.div
-                  key="step6"
+                  key="step5"
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
@@ -664,7 +599,7 @@ function BookPageContent() {
                   </div>
 
                   {/* Summary Card */}
-                  <div className="rounded-[1rem] border border-[#0F1717]/5 bg-[#F9F9F9] p-6 space-y-4">
+                  <div className="rounded-none border border-[#0F1717]/5 bg-[#F9F9F9] p-6 space-y-4">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-[#0A5C5C]">Appointment Overview</h3>
                     <div className="grid gap-4 sm:grid-cols-2 text-xs leading-relaxed text-[#0F1717]/90">
                       <div className="flex gap-2">
@@ -672,13 +607,6 @@ function BookPageContent() {
                         <div>
                           <strong className="block text-[#0F1717]">Treatment:</strong>
                           <span>{formData.treatmentName}</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <User className="h-4 w-4 shrink-0 text-[#0A5C5C]" />
-                        <div>
-                          <strong className="block text-[#0F1717]">Dentist:</strong>
-                          <span>{formData.dentistName}</span>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -698,7 +626,7 @@ function BookPageContent() {
                     </div>
                   </div>
 
-                  <div className="rounded-[1rem] border border-[#0F1717]/5 bg-[#F9F9F9] p-6 space-y-4">
+                  <div className="rounded-none border border-[#0F1717]/5 bg-[#F9F9F9] p-6 space-y-4">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-[#0A5C5C]">Patient Details</h3>
                     <div className="grid gap-4 sm:grid-cols-2 text-xs leading-relaxed text-[#0F1717]/90">
                       <div className="flex gap-2">
@@ -753,7 +681,7 @@ function BookPageContent() {
                       type="button"
                       disabled={isPending}
                       onClick={handleConfirmSubmit}
-                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-8 py-3.5 rounded-full text-sm font-bold shadow-[0_4px_12px_rgba(10,92,92,0.15)] hover:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-8 py-3.5 rounded-full text-sm font-bold shadow-none hover:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
                     >
                       {isPending ? (
                         <>
@@ -768,7 +696,7 @@ function BookPageContent() {
                 </motion.div>
               )}
 
-              {step === 7 && (
+              {step === 6 && (
                 <motion.div
                   key="success"
                   initial={{ opacity: 0, scale: 0.98 }}
@@ -786,15 +714,11 @@ function BookPageContent() {
                     </p>
                   </div>
 
-                  <div className="rounded-[1rem] border border-[#0F1717]/5 bg-[#F9F9F9] p-6 w-full max-w-sm text-left">
+                  <div className="rounded-none border border-[#0F1717]/5 bg-[#F9F9F9] p-6 w-full max-w-sm text-left">
                     <dl className="space-y-3 text-xs leading-relaxed text-[#0F1717]/85">
                       <div className="flex justify-between border-b border-[#0F1717]/5 pb-2">
                         <dt className="text-[#0F1717]/60">Treatment:</dt>
                         <dd className="font-semibold">{formData.treatmentName}</dd>
-                      </div>
-                      <div className="flex justify-between border-b border-[#0F1717]/5 pb-2">
-                        <dt className="text-[#0F1717]/60">Dentist:</dt>
-                        <dd className="font-semibold">{formData.dentistName}</dd>
                       </div>
                       <div className="flex justify-between border-b border-[#0F1717]/5 pb-2">
                         <dt className="text-[#0F1717]/60">Date:</dt>
@@ -825,8 +749,6 @@ function BookPageContent() {
                         setFormData({
                           treatmentId: "",
                           treatmentName: "",
-                          dentistId: "",
-                          dentistName: "",
                           date: "",
                           timeSlot: "",
                           patientName: "",

@@ -32,8 +32,6 @@ export default function Hero() {
   const { scrollY } = useScroll();
   const carouselX = useTransform(scrollY, [0, 1000], [0, -200]);
 
-  const blobY = useTransform(scrollY, [0, 600], [0, 90]);
-  const blobYReverse = useTransform(scrollY, [0, 600], [0, -70]);
   const indicatorOpacity = useTransform(scrollY, [0, 240], [1, 0]);
 
   // 5. Parallax rotate effects (stiffness: 60, damping: 18) for expensive 3D layout tilt
@@ -141,7 +139,7 @@ export default function Hero() {
                 transformStyle: "preserve-3d",
               }}
               // 4. Smoothness: Rounded-square (16px radius) layout with subtle shadow transition
-              className="relative w-80 h-56 rounded-[16px] overflow-hidden shrink-0 border border-deep-charcoal/5 bg-zinc-100 shadow-[0_4px_20px_-5px_rgba(15,23,23,0.08)] hover:shadow-[0_20px_40px_-15px_rgba(15,23,23,0.15)] transition-shadow duration-[var(--duration-base)] will-change-transform"
+              className="relative w-80 h-56 rounded-none overflow-hidden shrink-0 border border-deep-charcoal/5 bg-zinc-100 shadow-none hover:shadow-none transition-shadow duration-[var(--duration-base)] will-change-transform"
             >
               <Image
                 src={src}

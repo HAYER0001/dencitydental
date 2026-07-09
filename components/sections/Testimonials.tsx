@@ -128,7 +128,7 @@ export default function Testimonials() {
   return (
     <section 
       aria-labelledby="testimonials-section-title" 
-      className="py-16 overflow-hidden bg-background"
+      className="py-section-sm overflow-hidden bg-background"
     >
       <div className="mx-auto w-full max-w-6xl px-6">
         <div className="max-w-2xl mb-12">
@@ -166,7 +166,7 @@ export default function Testimonials() {
               key={`${testimonial.id}-${idx}`}
               // Accessibility Compliance: tabIndex={0} and proper outlines
               tabIndex={0}
-              className="flex h-full w-[22rem] shrink-0 flex-col justify-between rounded-[1rem] border border-[#0F1717]/5 bg-white p-7 shadow-[0_1px_2px_rgba(15,23,23,0.05),0_4px_12px_rgba(15,23,23,0.06)] transition-all duration-[var(--duration-base)] hover:border-[#0A5C5C]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] focus-visible:border-[#0A5C5C]/35 cursor-grab active:cursor-grabbing"
+              className="flex h-full w-[22rem] shrink-0 flex-col justify-between rounded-none border border-[#0F1717]/5 bg-white p-7 shadow-none transition-all duration-[var(--duration-base)] hover:border-[#0A5C5C]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] focus-visible:border-[#0A5C5C]/35 cursor-grab active:cursor-grabbing"
               aria-label={`Testimonial from ${testimonial.name} for ${testimonial.treatment}`}
             >
               <div>
