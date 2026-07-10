@@ -85,21 +85,22 @@ export default function Hero3D() {
               className="h-auto w-full"
               style={{ filter: "drop-shadow(0 0 20px rgba(255,255,255,0.3))" }}
             >
-              {/* Clinically accurate, professional molar silhouette with high-end anatomical detailing. */}
+              {/* Anatomically correct molar: a broad cusped crown tapering through the
+                  cervical neck into two divergent roots meeting at a central furcation. */}
               <path
-                d="M 32 20
-                   C 41 24, 49 24, 50 24
-                   C 51 24, 59 24, 68 20
-                   C 76 18, 83 26, 83 38
-                   C 83 46, 78 52, 75 56
-                   C 72 62, 70 78, 68 96
-                   C 67 101, 62 101, 61 96
-                   C 59 84, 56 68, 50 68
-                   C 44 68, 41 84, 39 96
-                   C 38 101, 33 101, 32 96
-                   C 30 78, 28 62, 25 56
-                   C 22 52, 17 46, 17 38
-                   C 17 26, 24 18, 32 20 Z"
+                d="M 24 42
+                   C 23 26, 33 15, 41 21
+                   C 45 24, 47 25, 50 21
+                   C 53 25, 55 24, 59 21
+                   C 67 15, 77 26, 76 42
+                   C 76 50, 73 55, 71 59
+                   C 69 70, 68 82, 66 94
+                   C 65 101, 60 102, 59 95
+                   C 57 82, 55 66, 50 66
+                   C 45 66, 43 82, 41 95
+                   C 40 102, 35 101, 34 94
+                   C 32 82, 31 70, 29 59
+                   C 27 55, 24 50, 24 42 Z"
                 stroke="#ffffff"
                 strokeWidth={3}
                 strokeLinejoin="round"
@@ -107,15 +108,15 @@ export default function Hero3D() {
               />
               {/* Cementoenamel junction (cervical line) */}
               <path
-                d="M 25 56 C 35 59, 65 59, 75 56"
+                d="M 29 59 C 39 62, 61 62, 71 59"
                 stroke="#ffffff"
                 strokeOpacity={0.3}
                 strokeWidth={2}
                 strokeLinecap="round"
               />
-              {/* Occlusal developmental grooves */}
+              {/* Occlusal developmental grooves across the cusps */}
               <path
-                d="M 50 24 V 44 M 36 34 C 42 38, 58 38, 64 34"
+                d="M 50 22 V 44 M 35 34 C 42 39, 58 39, 65 34"
                 stroke="#ffffff"
                 strokeOpacity={0.45}
                 strokeWidth={2}

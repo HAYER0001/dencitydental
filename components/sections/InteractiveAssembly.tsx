@@ -59,7 +59,7 @@ const cards: AssemblyCard[] = [
   {
     id: "c6",
     title: "Clear Honesty",
-    description: "Opaque-free treatment plans with detailed cost quotes provided upfront.",
+    description: "Clear treatment plans explained in plain language, upfront.",
     icon: <MessageSquare className="h-6 w-6" />,
     stackedRotation: -4,
     stackedZIndex: 5,

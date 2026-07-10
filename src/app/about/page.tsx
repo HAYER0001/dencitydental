@@ -19,7 +19,7 @@ export default function AboutPage() {
           <p className="text-eyebrow text-clinic-teal dark:text-clinic-teal-soft">Our philosophy</p>
           <h1 className="mt-3 text-display text-center">A calmer kind of dental care</h1>
           <p className="mt-6 text-body-lg text-muted">
-            We founded DENCITY to solve a simple problem: too many people avoid the dentist due to anxiety, rushed environments, or opaque pricing. We designed our practice from the ground up to feel warm, clear, and reassuring.
+            We founded DENCITY to solve a simple problem: too many people avoid the dentist due to anxiety or rushed, impersonal environments. We designed our practice from the ground up to feel warm, clear, and reassuring.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
           <div className="rounded-card border border-deep-charcoal/5 bg-background p-7 shadow-soft dark:border-white/10">
             <h2 className="text-heading-3 text-clinic-teal dark:text-clinic-teal-soft">Honest Transparency</h2>
             <p className="mt-4 text-body-sm text-muted leading-relaxed">
-              No hidden costs or surprise procedures. We provide clear, itemized quotes before any treatment begins, and we help you navigate insurance and financing options.
+              No surprises. We explain every diagnosis and treatment plan in plain language, so you always understand exactly what to expect before we begin.
             </p>
           </div>
         </div>

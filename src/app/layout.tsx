@@ -59,8 +59,6 @@ const clinicJsonLd = {
   telephone: "+91 98296 75893",
   email: "clinic@dencitydentalcare.in",
   image: `${SITE_URL}/og-image.jpg`,
-  priceRange: "$$",
-  currenciesAccepted: "INR",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Swami Vivekananda Nagar, Opposite Siyag Hospital",
