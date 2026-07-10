@@ -220,7 +220,7 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
         {/* Soft interactive spotlight layer */}
         <motion.div
           style={{ background: spotlightBg }}
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 z-0"
         />
 
         <div className="flex items-center gap-4 relative z-10">
@@ -297,7 +297,7 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
                   <Link
                     href={`/book?treatment=${service.id}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+                    className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90"
                   >
                     Book this Treatment
                   </Link>
@@ -312,7 +312,7 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
             <span>Learn more</span>
             <svg
               viewBox="0 0 24 24"
-              className="ml-1.5 h-4 w-4 transition-transform duration-[var(--duration-base)] group-hover:translate-x-1"
+              className="ml-1.5 h-4 w-4 transition-transform duration-[var(--duration-base)] group-hover:translate-x-1 group-active:translate-x-1"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"

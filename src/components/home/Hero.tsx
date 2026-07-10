@@ -101,7 +101,7 @@ export default function Hero() {
             <Magnetic>
               <Link
                 href="/book"
-                className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-7 py-3.5 font-semibold text-white shadow-soft transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-clinic-teal/90 hover:shadow-card"
+                className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-7 py-3.5 font-semibold text-white shadow-soft transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90 hover:shadow-card active:shadow-card"
               >
                 Book Appointment
               </Link>
@@ -109,12 +109,12 @@ export default function Hero() {
             <Magnetic>
               <Link
                 href="/services"
-                className="group inline-flex items-center justify-center gap-2 rounded-pill border border-deep-charcoal/15 px-7 py-3.5 font-semibold text-foreground transition-colors duration-[var(--duration-fast)] hover:border-clinic-teal/40 hover:text-clinic-teal dark:border-white/15 dark:hover:text-clinic-teal-soft"
+                className="group inline-flex items-center justify-center gap-2 rounded-pill border border-deep-charcoal/15 px-7 py-3.5 font-semibold text-foreground transition-colors duration-[var(--duration-fast)] hover:border-clinic-teal/40 active:border-clinic-teal/40 hover:text-clinic-teal active:text-clinic-teal dark:border-white/15 dark:hover:text-clinic-teal-soft dark:active:text-clinic-teal-soft"
               >
                 Explore Services
                 <span
                   aria-hidden="true"
-                  className="transition-transform duration-[var(--duration-base)] group-hover:translate-x-0.5"
+                  className="transition-transform duration-[var(--duration-base)] group-hover:translate-x-0.5 group-active:translate-x-0.5"
                 >
                   →
                 </span>
@@ -139,7 +139,7 @@ export default function Hero() {
                 transformStyle: "preserve-3d",
               }}
               // 4. Smoothness: Rounded-square (16px radius) layout with subtle shadow transition
-              className="relative w-80 h-56 rounded-none overflow-hidden shrink-0 border border-deep-charcoal/5 bg-zinc-100 shadow-none hover:shadow-none transition-shadow duration-[var(--duration-base)] will-change-transform"
+              className="relative w-80 h-56 rounded-none overflow-hidden shrink-0 border border-deep-charcoal/5 bg-zinc-100 shadow-none hover:shadow-none active:shadow-none transition-shadow duration-[var(--duration-base)] will-change-transform"
             >
               <Image
                 src={src}

@@ -80,7 +80,7 @@ function CaseCard({
       </div>
 
       {/* 3. Aesthetic: Glass-morphism Overlay on Hover */}
-      <div className="absolute inset-0 z-10 bg-[#0F1717]/35 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
+      <div className="absolute inset-0 z-10 bg-[#0F1717]/35 backdrop-blur-[3px] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pointer-events-none">
         <span className="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/90">
           {study.treatment}
         </span>
@@ -97,7 +97,7 @@ function CaseCard({
       </div>
 
       {/* Static overlay shown when NOT hovered (shows simple title card bottom bar) */}
-      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-5 z-10 group-hover:opacity-0 transition-opacity duration-300 flex items-end justify-between pointer-events-none">
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-5 z-10 group-hover:opacity-0 group-active:opacity-0 transition-opacity duration-300 flex items-end justify-between pointer-events-none">
         <div>
           <span className="text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-[#7fb8b8]">
             {study.treatment}

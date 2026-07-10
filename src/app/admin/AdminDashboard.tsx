@@ -247,7 +247,7 @@ export default function AdminDashboard() {
         </div>
         <button
           onClick={() => signOut(auth)}
-          className="flex items-center gap-2 rounded-pill border border-white/20 px-4 py-2 text-sm text-white hover:bg-white/10 transition-colors"
+          className="flex items-center gap-2 rounded-pill border border-white/20 px-4 py-2 text-sm text-white hover:bg-white/10 active:bg-white/10 transition-colors"
         >
           <LogOut className="h-4 w-4" /> Sign Out
         </button>
@@ -265,7 +265,7 @@ export default function AdminDashboard() {
             </div>
             <button
               onClick={handleRetry}
-              className="flex items-center gap-2 rounded-pill border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/10 transition-colors"
+              className="flex items-center gap-2 rounded-pill border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/10 active:bg-white/10 transition-colors"
             >
               <RefreshCw className="h-4 w-4" /> Try again
             </button>
@@ -282,14 +282,14 @@ export default function AdminDashboard() {
             return (
               <div
                 key={appt.id}
-                className="group flex flex-col justify-between rounded-card border border-white/10 bg-white/5 p-6 backdrop-blur-md hover:bg-white/10 transition-all duration-300"
+                className="group flex flex-col justify-between rounded-card border border-white/10 bg-white/5 p-6 backdrop-blur-md hover:bg-white/10 active:bg-white/10 transition-all duration-300"
               >
                 <div>
                   <div className="mb-6 flex items-start justify-between gap-4">
                     <div className="overflow-hidden">
                       <h3 className="font-medium text-white text-lg truncate">{appt.name}</h3>
-                      <a href={`mailto:${appt.email}`} className="text-sm text-clinic-teal-soft hover:underline truncate block">{appt.email}</a>
-                      {appt.phone && <a href={`tel:${appt.phone}`} className="text-sm text-white/50 hover:text-white/80 transition-colors block mt-1">{appt.phone}</a>}
+                      <a href={`mailto:${appt.email}`} className="text-sm text-clinic-teal-soft hover:underline active:underline truncate block">{appt.email}</a>
+                      {appt.phone && <a href={`tel:${appt.phone}`} className="text-sm text-white/50 hover:text-white/80 active:text-white/80 transition-colors block mt-1">{appt.phone}</a>}
                     </div>
                     <span className={`shrink-0 rounded-pill px-3 py-1 text-xs font-semibold capitalize border ${
                       appt.status === "pending" ? "bg-yellow-500/10 text-yellow-300 border-yellow-500/20" :
@@ -317,7 +317,7 @@ export default function AdminDashboard() {
                     <button
                       onClick={() => handleStatusUpdate(appt.id, "approved")}
                       disabled={isProcessing}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-button bg-clinic-teal px-4 py-2.5 text-sm font-medium text-white hover:bg-clinic-teal-soft transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex flex-1 items-center justify-center gap-2 rounded-button bg-clinic-teal px-4 py-2.5 text-sm font-medium text-white hover:bg-clinic-teal-soft active:bg-clinic-teal-soft transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {isProcessing && processing?.action === "approved" ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -329,7 +329,7 @@ export default function AdminDashboard() {
                     <button
                       onClick={() => handleStatusUpdate(appt.id, "denied")}
                       disabled={isProcessing}
-                      className="flex flex-1 items-center justify-center gap-2 rounded-button border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex flex-1 items-center justify-center gap-2 rounded-button border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10 active:bg-white/10 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {isProcessing && processing?.action === "denied" ? (
                         <Loader2 className="h-4 w-4 animate-spin" />

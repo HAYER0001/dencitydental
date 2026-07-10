@@ -66,7 +66,7 @@ function StarIcon() {
 
 function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <article className="flex h-full w-[22rem] shrink-0 flex-col justify-between rounded-card border border-deep-charcoal/5 bg-background p-7 shadow-soft transition-colors duration-[var(--duration-base)] hover:border-clinic-teal/20 dark:border-white/10 dark:hover:border-clinic-teal-soft/20">
+    <article className="flex h-full w-[22rem] shrink-0 flex-col justify-between rounded-card border border-deep-charcoal/5 bg-background p-7 shadow-soft transition-colors duration-[var(--duration-base)] hover:border-clinic-teal/20 active:border-clinic-teal/20 dark:border-white/10 dark:hover:border-clinic-teal-soft/20 dark:active:border-clinic-teal-soft/20">
       <div>
         <div className="flex items-center gap-1">
           {Array.from({ length: testimonial.rating }).map((_, idx) => (

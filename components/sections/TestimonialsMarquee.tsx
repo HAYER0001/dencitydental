@@ -103,7 +103,7 @@ export default function TestimonialsMarquee({ testimonials }: TestimonialsMarque
               key={`${testimonial.id}-${idx}`}
               // Accessibility Compliance: tabIndex={0} and proper outlines
               tabIndex={0}
-              className="flex h-full w-[22rem] shrink-0 flex-col justify-between rounded-none border border-[#0F1717]/5 bg-white p-7 shadow-none transition-all duration-[var(--duration-base)] hover:border-[#0A5C5C]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] focus-visible:border-[#0A5C5C]/35 cursor-grab active:cursor-grabbing"
+              className="flex h-full w-[22rem] shrink-0 flex-col justify-between rounded-none border border-[#0F1717]/5 bg-white p-7 shadow-none transition-all duration-[var(--duration-base)] hover:border-[#0A5C5C]/20 active:border-[#0A5C5C]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A5C5C] focus-visible:border-[#0A5C5C]/35 cursor-grab active:cursor-grabbing"
               aria-label={`Testimonial from ${testimonial.name} for ${testimonial.treatment}`}
             >
               <div>

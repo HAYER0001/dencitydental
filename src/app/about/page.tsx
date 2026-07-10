@@ -52,13 +52,13 @@ export default function AboutPage() {
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
             <Link
               href="/book"
-              className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+              className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90"
             >
               Book an Appointment
             </Link>
             <Link
               href="/services"
-              className="inline-flex items-center justify-center rounded-pill border border-deep-charcoal/15 px-6 py-3.5 font-semibold text-foreground transition-colors duration-[var(--duration-fast)] hover:border-clinic-teal/40 hover:text-clinic-teal dark:border-white/15 dark:hover:text-clinic-teal-soft"
+              className="inline-flex items-center justify-center rounded-pill border border-deep-charcoal/15 px-6 py-3.5 font-semibold text-foreground transition-colors duration-[var(--duration-fast)] hover:border-clinic-teal/40 active:border-clinic-teal/40 hover:text-clinic-teal active:text-clinic-teal dark:border-white/15 dark:hover:text-clinic-teal-soft dark:active:text-clinic-teal-soft"
             >
               Explore Services
             </Link>

@@ -75,7 +75,7 @@ export default function Footer() {
               <li>
                 <a
                   href="tel:+919829675893"
-                  className="transition-colors duration-[var(--duration-fast)] hover:text-white"
+                  className="transition-colors duration-[var(--duration-fast)] hover:text-white active:text-white"
                 >
                   +91 98296 75893
                 </a>
@@ -83,7 +83,7 @@ export default function Footer() {
               <li>
                 <a
                   href="mailto:clinic@dencitydentalcare.in"
-                  className="transition-colors duration-[var(--duration-fast)] hover:text-white"
+                  className="transition-colors duration-[var(--duration-fast)] hover:text-white active:text-white"
                 >
                   clinic@dencitydentalcare.in
                 </a>
@@ -111,7 +111,7 @@ export default function Footer() {
                   <a
                     href={social.href}
                     aria-label={social.label}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-pill border border-white/15 text-white/70 transition-colors duration-[var(--duration-fast)] hover:border-white/40 hover:text-white"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-pill border border-white/15 text-white/70 transition-colors duration-[var(--duration-fast)] hover:border-white/40 active:border-white/40 hover:text-white active:text-white"
                   >
                     <svg
                       viewBox="0 0 24 24"

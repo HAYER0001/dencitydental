@@ -32,7 +32,7 @@ export default function ContactPage() {
                 <div>
                   <dt className="font-semibold text-foreground">Phone Support</dt>
                   <dd className="mt-1 text-muted">
-                    <a href="tel:+919829675893" className="hover:text-clinic-teal transition-colors">
+                    <a href="tel:+919829675893" className="hover:text-clinic-teal active:text-clinic-teal transition-colors">
                       +91 98296 75893
                     </a>
                   </dd>
@@ -40,7 +40,7 @@ export default function ContactPage() {
                 <div>
                   <dt className="font-semibold text-foreground">Email Inquiries</dt>
                   <dd className="mt-1 text-muted">
-                    <a href="mailto:clinic@dencitydentalcare.in" className="hover:text-clinic-teal transition-colors">
+                    <a href="mailto:clinic@dencitydentalcare.in" className="hover:text-clinic-teal active:text-clinic-teal transition-colors">
                       clinic@dencitydentalcare.in
                     </a>
                   </dd>
@@ -87,7 +87,7 @@ export default function ContactPage() {
                 href="https://maps.google.com/?q=Swami+Vivekananda+Nagar+Opposite+Siyag+Hospital+Suratgarh+Rajasthan+335804"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-10 inline-block text-eyebrow text-clinic-teal transition-colors hover:text-clinic-teal/70 dark:text-clinic-teal-soft"
+                className="mt-10 inline-block text-eyebrow text-clinic-teal transition-colors hover:text-clinic-teal/70 active:text-clinic-teal/70 dark:text-clinic-teal-soft"
               >
                 Get Directions
               </a>

@@ -31,7 +31,7 @@ export default function SignInPage() {
             New to DENCITY?{" "}
             <Link
               href="/book"
-              className="font-semibold text-clinic-teal hover:underline dark:text-clinic-teal-soft"
+              className="font-semibold text-clinic-teal hover:underline active:underline dark:text-clinic-teal-soft"
             >
               Book your first appointment
             </Link>{" "}

@@ -124,7 +124,7 @@ export default function Navbar() {
               <Magnetic>
                 <Link
                   href={signInLink.href}
-                  className="rounded-button px-3 py-2 text-body-sm font-medium text-foreground/70 transition-colors duration-[var(--duration-fast)] hover:text-foreground"
+                  className="rounded-button px-3 py-2 text-body-sm font-medium text-foreground/70 transition-colors duration-[var(--duration-fast)] hover:text-foreground active:text-foreground"
                 >
                   {signInLink.label}
                 </Link>
@@ -132,7 +132,7 @@ export default function Navbar() {
               <Magnetic glow>
                 <Link
                   href={bookLink.href}
-                  className="rounded-pill bg-clinic-teal px-5 py-2.5 text-body-sm font-semibold text-white shadow-soft transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-clinic-teal/90 hover:shadow-card"
+                  className="rounded-pill bg-clinic-teal px-5 py-2.5 text-body-sm font-semibold text-white shadow-soft transition-[background-color,box-shadow] duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90 hover:shadow-card active:shadow-card"
                 >
                   {bookLink.label}
                 </Link>
@@ -146,7 +146,7 @@ export default function Navbar() {
               aria-controls="mobile-nav"
               aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((value) => !value)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-button text-foreground transition-colors duration-[var(--duration-fast)] hover:bg-white/40 md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-button text-foreground transition-colors duration-[var(--duration-fast)] hover:bg-white/40 active:bg-white/40 md:hidden"
             >
               <span aria-hidden="true" className="relative block h-4 w-5">
                 <span
@@ -202,7 +202,7 @@ export default function Navbar() {
                   type="button"
                   aria-label="Close menu"
                   onClick={close}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-button text-foreground/70 transition-colors duration-[var(--duration-fast)] hover:bg-surface hover:text-foreground"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-button text-foreground/70 transition-colors duration-[var(--duration-fast)] hover:bg-surface active:bg-surface hover:text-foreground active:text-foreground"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -262,7 +262,7 @@ export default function Navbar() {
                   <Link
                     href={bookLink.href}
                     onClick={close}
-                    className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+                    className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90"
                   >
                     {bookLink.label}
                   </Link>

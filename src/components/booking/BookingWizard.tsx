@@ -361,7 +361,7 @@ function BookingWizardContent() {
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 dark:text-clinic-teal-soft"
+                  className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 active:text-clinic-teal/80 dark:text-clinic-teal-soft"
                 >
                   &larr; Back to treatments
                 </button>
@@ -422,7 +422,7 @@ function BookingWizardContent() {
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 dark:text-clinic-teal-soft"
+                  className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 active:text-clinic-teal/80 dark:text-clinic-teal-soft"
                 >
                   &larr; Back to dates
                 </button>
@@ -558,7 +558,7 @@ function BookingWizardContent() {
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 dark:text-clinic-teal-soft"
+                    className="text-body-sm font-medium text-clinic-teal transition-colors hover:text-clinic-teal/80 active:text-clinic-teal/80 dark:text-clinic-teal-soft"
                   >
                     &larr; Back to time slots
                   </button>
@@ -567,7 +567,7 @@ function BookingWizardContent() {
                     <button
                       type="submit"
                       disabled={isPending}
-                      className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-6 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 disabled:opacity-50"
+                      className="inline-flex items-center justify-center rounded-pill bg-clinic-teal px-6 py-3 font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90 disabled:opacity-50"
                     >
                       {isPending ? (
                         <span className="flex items-center gap-2">
@@ -658,7 +658,7 @@ function BookingWizardContent() {
               <div className="pt-4 flex flex-col w-full sm:flex-row sm:justify-center gap-3">
                 <button
                   onClick={() => router.push("/")}
-                  className="rounded-pill border border-deep-charcoal/15 px-6 py-3.5 text-body-sm font-semibold text-foreground transition-colors duration-[var(--duration-fast)] hover:border-clinic-teal/40 hover:text-clinic-teal dark:border-white/15 dark:hover:text-clinic-teal-soft"
+                  className="rounded-pill border border-deep-charcoal/15 px-6 py-3.5 text-body-sm font-semibold text-foreground transition-colors duration-[var(--duration-fast)] hover:border-clinic-teal/40 active:border-clinic-teal/40 hover:text-clinic-teal active:text-clinic-teal dark:border-white/15 dark:hover:text-clinic-teal-soft dark:active:text-clinic-teal-soft"
                 >
                   Return Home
                 </button>
@@ -677,7 +677,7 @@ function BookingWizardContent() {
                     setBookingError(null);
                     goToStep("treatment");
                   }}
-                  className="rounded-pill bg-clinic-teal px-6 py-3.5 text-body-sm font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+                  className="rounded-pill bg-clinic-teal px-6 py-3.5 text-body-sm font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90"
                 >
                   Book Another Visit
                 </button>

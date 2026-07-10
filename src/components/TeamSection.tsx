@@ -49,7 +49,7 @@ export default function TeamSection() {
           {doctors.map((doctor, index) => (
             <div
               key={index}
-              className="group flex flex-col overflow-hidden rounded-card bg-background shadow-soft hover:shadow-card transition-shadow duration-300 border border-black/5 dark:border-white/10"
+              className="group flex flex-col overflow-hidden rounded-card bg-background shadow-soft hover:shadow-card active:shadow-card transition-shadow duration-300 border border-black/5 dark:border-white/10"
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-surface">
                 {/* Portrait 3:4 crop with object-top + origin-top: gives vertical
@@ -60,7 +60,7 @@ export default function TeamSection() {
                   alt={`${doctor.name.split("|")[0].trim()}, ${doctor.title} at Dencity Dental Care in Suratgarh`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover object-top origin-top grayscale transition duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.04]"
+                  className="object-cover object-top origin-top grayscale transition duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.04] group-active:scale-[1.04]"
                 />
                 {/* Seat the portrait into the card with a soft floor gradient — subtle in
                     light, deeper in dark mode so the image melts into the card body. */}

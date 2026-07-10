@@ -59,7 +59,7 @@ function initials(name: string) {
 export function DoctorCard({ doctor }: { doctor: Doctor }) {
   return (
     <article
-      className="h-full overflow-hidden rounded-card border border-deep-charcoal/5 bg-background shadow-soft transition-[box-shadow,transform] duration-[var(--duration-base)] hover:-translate-y-0.5 hover:shadow-card motion-reduce:hover:translate-y-0 dark:border-white/10"
+      className="h-full overflow-hidden rounded-card border border-deep-charcoal/5 bg-background shadow-soft transition-[box-shadow,transform] duration-[var(--duration-base)] hover:-translate-y-0.5 active:-translate-y-0.5 hover:shadow-card active:shadow-card motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0 dark:border-white/10"
     >
       <div className="relative aspect-[4/3]">
         {doctor.image ? (

@@ -184,6 +184,11 @@ export default function InteractiveAssembly() {
                     y: -5,
                     boxShadow: "0 20px 40px -15px rgba(15, 23, 23, 0.15), 0 30px 60px -20px rgba(15, 23, 23, 0.1)",
                   }}
+                  whileTap={{
+                    scale: 1.03,
+                    y: -5,
+                    boxShadow: "0 20px 40px -15px rgba(15, 23, 23, 0.15), 0 30px 60px -20px rgba(15, 23, 23, 0.1)",
+                  }}
                   transition={
                     reduceMotion 
                       ? { duration: 0 } 

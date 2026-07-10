@@ -85,27 +85,39 @@ export default function Hero3D() {
               className="h-auto w-full"
               style={{ filter: "drop-shadow(0 0 20px rgba(255,255,255,0.3))" }}
             >
-              {/* Abstract, minimalist tooth silhouette — clean thick strokes, no fill. */}
+              {/* Clinically accurate, professional molar silhouette with high-end anatomical detailing. */}
               <path
-                d="M50 12
-                   C34 12 18 22 18 43
-                   C18 60 24 79 31 92
-                   C34 99 42 99 44 88
-                   C46 77 47 71 50 71
-                   C53 71 54 77 56 88
-                   C58 99 66 99 69 92
-                   C76 79 82 60 82 43
-                   C82 22 66 12 50 12 Z"
+                d="M 32 20
+                   C 41 24, 49 24, 50 24
+                   C 51 24, 59 24, 68 20
+                   C 76 18, 83 26, 83 38
+                   C 83 46, 78 52, 75 56
+                   C 72 62, 70 78, 68 96
+                   C 67 101, 62 101, 61 96
+                   C 59 84, 56 68, 50 68
+                   C 44 68, 41 84, 39 96
+                   C 38 101, 33 101, 32 96
+                   C 30 78, 28 62, 25 56
+                   C 22 52, 17 46, 17 38
+                   C 17 26, 24 18, 32 20 Z"
                 stroke="#ffffff"
                 strokeWidth={3}
                 strokeLinejoin="round"
                 strokeLinecap="round"
               />
-              {/* Subtle inner highlight arc for a high-end, engineered feel. */}
+              {/* Cementoenamel junction (cervical line) */}
               <path
-                d="M35 30 C41 24 50 23 56 27"
+                d="M 25 56 C 35 59, 65 59, 75 56"
                 stroke="#ffffff"
-                strokeOpacity={0.55}
+                strokeOpacity={0.3}
+                strokeWidth={2}
+                strokeLinecap="round"
+              />
+              {/* Occlusal developmental grooves */}
+              <path
+                d="M 50 24 V 44 M 36 34 C 42 38, 58 38, 64 34"
+                stroke="#ffffff"
+                strokeOpacity={0.45}
                 strokeWidth={2}
                 strokeLinecap="round"
               />

@@ -314,7 +314,7 @@ function BookPageContent() {
                       type="button"
                       disabled={!formData.treatmentId}
                       onClick={handleNext}
-                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 active:bg-[#0A5C5C]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       Next Step <ChevronRight className="h-4 w-4" />
                     </button>
@@ -370,7 +370,7 @@ function BookPageContent() {
                     <button
                       type="button"
                       onClick={handleBack}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline"
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline active:underline"
                     >
                       <ChevronLeft className="h-4 w-4" /> Back
                     </button>
@@ -378,7 +378,7 @@ function BookPageContent() {
                       type="button"
                       disabled={!formData.date}
                       onClick={handleNext}
-                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 active:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
                     >
                       Next Step <ChevronRight className="h-4 w-4" />
                     </button>
@@ -474,7 +474,7 @@ function BookPageContent() {
                     <button
                       type="button"
                       onClick={handleBack}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline"
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline active:underline"
                     >
                       <ChevronLeft className="h-4 w-4" /> Back
                     </button>
@@ -482,7 +482,7 @@ function BookPageContent() {
                       type="button"
                       disabled={!formData.timeSlot || loadingSlots}
                       onClick={handleNext}
-                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 active:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
                     >
                       Next Step <ChevronRight className="h-4 w-4" />
                     </button>
@@ -570,14 +570,14 @@ function BookPageContent() {
                     <button
                       type="button"
                       onClick={handleBack}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline"
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline active:underline"
                     >
                       <ChevronLeft className="h-4 w-4" /> Back
                     </button>
                     <button
                       type="button"
                       onClick={handleNext}
-                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#0A5C5C]/90 active:bg-[#0A5C5C]/90 transition-colors"
                     >
                       Next Step <ChevronRight className="h-4 w-4" />
                     </button>
@@ -673,7 +673,7 @@ function BookPageContent() {
                       type="button"
                       disabled={isPending}
                       onClick={handleBack}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline disabled:opacity-50"
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-[#0A5C5C] hover:underline active:underline disabled:opacity-50"
                     >
                       <ChevronLeft className="h-4 w-4" /> Back
                     </button>
@@ -681,7 +681,7 @@ function BookPageContent() {
                       type="button"
                       disabled={isPending}
                       onClick={handleConfirmSubmit}
-                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-8 py-3.5 rounded-full text-sm font-bold shadow-none hover:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#0A5C5C] text-white px-8 py-3.5 rounded-full text-sm font-bold shadow-none hover:bg-[#0A5C5C]/90 active:bg-[#0A5C5C]/90 disabled:opacity-50 transition-colors"
                     >
                       {isPending ? (
                         <>
@@ -739,7 +739,7 @@ function BookPageContent() {
                     <button
                       type="button"
                       onClick={() => router.push("/")}
-                      className="rounded-full border border-[#0F1717]/15 px-6 py-3 text-xs font-bold text-[#0F1717] hover:border-[#0A5C5C]/40 hover:text-[#0A5C5C] transition-colors"
+                      className="rounded-full border border-[#0F1717]/15 px-6 py-3 text-xs font-bold text-[#0F1717] hover:border-[#0A5C5C]/40 active:border-[#0A5C5C]/40 hover:text-[#0A5C5C] active:text-[#0A5C5C] transition-colors"
                     >
                       Return Home
                     </button>
@@ -758,7 +758,7 @@ function BookPageContent() {
                         });
                         setStep(1);
                       }}
-                      className="rounded-full bg-[#0A5C5C] text-white px-6 py-3 text-xs font-bold hover:bg-[#0A5C5C]/90 shadow-soft transition-colors"
+                      className="rounded-full bg-[#0A5C5C] text-white px-6 py-3 text-xs font-bold hover:bg-[#0A5C5C]/90 active:bg-[#0A5C5C]/90 shadow-soft transition-colors"
                     >
                       Book Another Visit
                     </button>

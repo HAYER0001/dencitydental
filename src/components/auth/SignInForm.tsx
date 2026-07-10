@@ -178,7 +178,7 @@ function SignInFormContent() {
             <a
               href="#forgot"
               onClick={(e) => e.preventDefault()}
-              className="text-xs font-medium text-clinic-teal hover:underline dark:text-clinic-teal-soft"
+              className="text-xs font-medium text-clinic-teal hover:underline active:underline dark:text-clinic-teal-soft"
             >
               Forgot password?
             </a>
@@ -199,7 +199,7 @@ function SignInFormContent() {
             disabled={submitting}
             whileTap={reduceMotion ? undefined : { scale: 0.98 }}
             transition={{ type: "spring", stiffness: 420, damping: 24 }}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-pill bg-clinic-teal px-6 py-3.5 font-semibold text-white transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? (
               <>

@@ -15,7 +15,6 @@ type ServiceDetail = {
   specialist: string;
   description: string;
   treatments: string[];
-  pricing: string;
 };
 
 const serviceDetails: ServiceDetail[] = [
@@ -25,7 +24,6 @@ const serviceDetails: ServiceDetail[] = [
     specialist: "Dr. Maya Sharma",
     description: "Keep your teeth and gums healthy for life. We focus on preventive maintenance, digital diagnostics, and conservative restoration methods.",
     treatments: ["Comprehensive Oral Exams", "Digital Low-Radiation X-Rays", "Ultrasonic Hygiene Cleanings", "Mercury-Free Composite Fillings"],
-    pricing: "from $99",
   },
   {
     id: "cosmetic",
@@ -33,7 +31,6 @@ const serviceDetails: ServiceDetail[] = [
     specialist: "Dr. Maya Sharma",
     description: "Design the smile of your dreams. Our custom aesthetic services combine art and science to enhance your teeth while preserving structural integrity.",
     treatments: ["Digital Smile Previewing", "Porcelain Veneers & Crowns", "In-Office Teeth Whitening", "Composite Resin Bonding"],
-    pricing: "from $1,499",
   },
   {
     id: "ortho",
@@ -41,7 +38,6 @@ const serviceDetails: ServiceDetail[] = [
     specialist: "Dr. Arjun Mehta",
     description: "Achieve optimal alignment and a healthier bite. We offer modern clear aligner systems and discreet braces for kids, teens, and adults.",
     treatments: ["Discreet Clear Aligners", "Traditional Ceramic Braces", "Retainers & Post-Care", "Interceptive Pediatric Orthodontics"],
-    pricing: "from $1,999",
   },
   {
     id: "implants",
@@ -49,7 +45,6 @@ const serviceDetails: ServiceDetail[] = [
     specialist: "Dr. Daniel Okafor",
     description: "Restore missing teeth permanently. Implants look, feel, and function exactly like natural teeth, preventing bone loss and maintaining facial structure.",
     treatments: ["3D-Guided Implant Surgery", "Biocompatible Titanium Implants", "Realistic Custom Ceramic Crowns", "Full-Arch Rehabilitation"],
-    pricing: "from $2,900",
   },
   {
     id: "pediatric",
@@ -57,7 +52,6 @@ const serviceDetails: ServiceDetail[] = [
     specialist: "Dr. Elena Rodrigues",
     description: "Caring, unhurried dental care for our youngest patients. We make visits fun, build positive habits early, and monitor developmental milestones.",
     treatments: ["Gentle Child Screenings", "Fissure Sealants", "Fluoride Applications", "Parental Care Education"],
-    pricing: "from $89",
   },
   {
     id: "emergency",
@@ -65,7 +59,6 @@ const serviceDetails: ServiceDetail[] = [
     specialist: "Dr. Daniel Okafor",
     description: "Immediate support when you need it most. We prioritize same-day emergency slots to relieve pain, repair fractures, and treat infections.",
     treatments: ["Severe Toothache Relief", "Broken Restoration Repairs", "Knocked-out Tooth Re-implantation", "Dental Infection Treatments"],
-    pricing: "Priority Booking",
   },
 ];
 
@@ -103,12 +96,6 @@ export default function ServicesPage() {
                   <p className="mt-4 text-body text-muted leading-relaxed">
                     {service.description}
                   </p>
-
-                  <div className="mt-6 flex flex-wrap gap-2.5">
-                    <span className="rounded-pill bg-surface px-3 py-1.5 text-xs font-semibold text-foreground/80">
-                      Standard pricing: {service.pricing}
-                    </span>
-                  </div>
                 </div>
 
                 <div className={`flex flex-col justify-between border-t border-deep-charcoal/5 pt-6 dark:border-white/10 md:border-t-0 md:border-l md:pl-8 md:pt-0 ${
@@ -143,7 +130,7 @@ export default function ServicesPage() {
                     <Magnetic className="block w-full" strength={0.12} glow>
                       <Link
                         href={`/book?treatment=${service.id}`}
-                        className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 text-body-sm font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90"
+                        className="inline-flex w-full items-center justify-center rounded-pill bg-clinic-teal px-5 py-3 text-body-sm font-semibold text-white shadow-soft transition-colors duration-[var(--duration-fast)] hover:bg-clinic-teal/90 active:bg-clinic-teal/90"
                       >
                         Book Appointment
                       </Link>
