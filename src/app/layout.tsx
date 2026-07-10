@@ -41,6 +41,101 @@ export const viewport: Viewport = {
   ],
 };
 
+// Public site URL — inferred from the clinic email domain. Update if the
+// production domain differs.
+const SITE_URL = "https://www.dencitydentalcare.in";
+
+// JSON-LD structured data: identifies the clinic to search engines as a
+// MedicalClinic / LocalBusiness / Dentist, with address, contact, hours,
+// services and practitioners. Rendered as a Server Component script tag.
+const clinicJsonLd = {
+  "@context": "https://schema.org",
+  "@type": ["MedicalClinic", "LocalBusiness", "Dentist"],
+  "@id": `${SITE_URL}/#clinic`,
+  name: "Dencity Dental Care",
+  description:
+    "Modern, gentle dental care — implants, orthodontics, aesthetic rehabilitation and preventive dentistry in Suratgarh, Rajasthan.",
+  url: SITE_URL,
+  telephone: "+91 98296 75893",
+  email: "clinic@dencitydentalcare.in",
+  image: `${SITE_URL}/og-image.jpg`,
+  priceRange: "$$",
+  currenciesAccepted: "INR",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Swami Vivekananda Nagar, Opposite Siyag Hospital",
+    addressLocality: "Suratgarh",
+    addressRegion: "Rajasthan",
+    postalCode: "335804",
+    addressCountry: "IN",
+  },
+  areaServed: {
+    "@type": "City",
+    name: "Suratgarh",
+  },
+  // Real aggregate from the clinic's public Google Business profile.
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    reviewCount: "131",
+    bestRating: "5",
+    worstRating: "1",
+  },
+  medicalSpecialty: [
+    "Dentistry",
+    "Orthodontic",
+    "Prosthodontic",
+    "Endodontic",
+  ],
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Monday",
+      opens: "10:00",
+      closes: "19:30",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Tuesday",
+      opens: "10:00",
+      closes: "19:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "10:00",
+      closes: "19:30",
+    },
+  ],
+  availableService: [
+    { "@type": "MedicalProcedure", name: "Dental Implants" },
+    { "@type": "MedicalProcedure", name: "Aesthetic Rehabilitation" },
+    { "@type": "MedicalProcedure", name: "Orthodontics" },
+    { "@type": "MedicalProcedure", name: "Root Canal Treatment" },
+    { "@type": "MedicalProcedure", name: "General & Preventive Dentistry" },
+  ],
+  employee: [
+    {
+      "@type": "Physician",
+      name: "Dr. Jagjeet Singh",
+      jobTitle: "Prosthodontist",
+      medicalSpecialty: "Prosthodontic",
+    },
+    {
+      "@type": "Physician",
+      name: "Dr. Varun Ahuja",
+      jobTitle: "Orthodontist",
+      medicalSpecialty: "Orthodontic",
+    },
+    {
+      "@type": "Physician",
+      name: "Dr. Manisha",
+      jobTitle: "General & Preventive Dentistry (BDS)",
+      medicalSpecialty: "Dentistry",
+    },
+  ],
+} as const;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -52,6 +147,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* Structured data for search engines (MedicalClinic / LocalBusiness). */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(clinicJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <GreetingSequence />
         <CustomCursor />
         <a

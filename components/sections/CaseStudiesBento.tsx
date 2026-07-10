@@ -51,7 +51,7 @@ function CaseCard({
         <div className="relative w-1/2 h-full overflow-hidden bg-zinc-800">
           <Image
             src="/images/bright_smile.jpg"
-            alt={`${study.title} Before`}
+            alt={`${study.title} — before ${study.treatment} at Dencity Dental Care`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover grayscale brightness-50 contrast-125 object-center pointer-events-none"
@@ -68,7 +68,7 @@ function CaseCard({
         <div className="relative w-1/2 h-full overflow-hidden bg-zinc-700">
           <Image
             src="/images/bright_smile.jpg"
-            alt={`${study.title} After`}
+            alt={`${study.title} — after ${study.treatment} at Dencity Dental Care`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover object-center pointer-events-none"
@@ -215,7 +215,7 @@ export default function CaseStudiesBento() {
                   <div className="relative w-1/2 h-full overflow-hidden bg-zinc-800">
                     <Image
                       src="/images/bright_smile.jpg"
-                      alt={`${study.title} Before`}
+                      alt={`${study.title} — before ${study.treatment} at Dencity Dental Care`}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover grayscale brightness-50 contrast-125 object-center pointer-events-none"
@@ -228,7 +228,7 @@ export default function CaseStudiesBento() {
                   <div className="relative w-1/2 h-full overflow-hidden bg-zinc-700">
                     <Image
                       src="/images/bright_smile.jpg"
-                      alt={`${study.title} After`}
+                      alt={`${study.title} — after ${study.treatment} at Dencity Dental Care`}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover object-center pointer-events-none"

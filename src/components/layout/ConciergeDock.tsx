@@ -10,6 +10,8 @@ export type DockAction = {
   label: string;
   href: string;
   icon: ReactNode;
+  /** Explicit accessible name — the short visible label is often ambiguous. */
+  ariaLabel: string;
   /** Renders a plain <a target="_blank"> instead of a Next.js Link. */
   external?: boolean;
   /** Highlights the action in clinic teal. */
@@ -20,6 +22,7 @@ const defaultActions: DockAction[] = [
   {
     label: "Book",
     href: "/book",
+    ariaLabel: "Book an appointment at Dencity Dental Care",
     primary: true,
     icon: (
       <>
@@ -32,7 +35,8 @@ const defaultActions: DockAction[] = [
   },
   {
     label: "Call",
-    href: "tel:+15550123456",
+    href: "tel:+919829675893",
+    ariaLabel: "Call Dencity Dental Care",
     external: true,
     icon: (
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -40,7 +44,8 @@ const defaultActions: DockAction[] = [
   },
   {
     label: "Directions",
-    href: "https://maps.google.com/?q=Swami+Vivekananda+Nagar+Suratgarh+Rajasthan+335804",
+    href: "https://maps.google.com/?q=Swami+Vivekananda+Nagar+Opposite+Siyag+Hospital+Suratgarh+Rajasthan+335804",
+    ariaLabel: "Get directions to Dencity Dental Care, opposite Siyag Hospital in Suratgarh",
     external: true,
     icon: (
       <>
@@ -51,7 +56,8 @@ const defaultActions: DockAction[] = [
   },
   {
     label: "WhatsApp",
-    href: "https://wa.me/15550123456",
+    href: "https://wa.me/919829675893",
+    ariaLabel: "Book an appointment at Dencity Dental Care via WhatsApp",
     external: true,
     icon: (
       <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
@@ -86,6 +92,7 @@ function DockButton({ action }: { action: DockAction }) {
     return (
       <a
         href={action.href}
+        aria-label={action.ariaLabel}
         className={className}
         {...(isWebLink ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
@@ -96,7 +103,7 @@ function DockButton({ action }: { action: DockAction }) {
   }
 
   return (
-    <Link href={action.href} className={className}>
+    <Link href={action.href} aria-label={action.ariaLabel} className={className}>
       {icon}
       {action.label}
     </Link>

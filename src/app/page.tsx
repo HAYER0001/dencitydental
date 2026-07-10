@@ -9,6 +9,7 @@ import PixelAssembleText from "../../components/sections/PixelAssembleText";
 import HeroReveal from "../../components/sections/HeroReveal";
 import CaseStudiesBento from "../../components/sections/CaseStudiesBento";
 import Testimonials from "../../components/sections/Testimonials";
+import Faq from "@/components/home/Faq";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <HeroReveal />
       <CaseStudiesBento />
       <Testimonials />
+      <Faq />
     </>
   );
 }

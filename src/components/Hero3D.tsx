@@ -50,8 +50,15 @@ export default function Hero3D() {
     <div id="hero-3d-wrapper" ref={containerRef} className="relative h-[400vh] w-full bg-[#0F1717]">
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
 
+        {/* Single authoritative page h1 for screen readers and crawlers — the
+            animated hero wordmark below is decorative, so the semantic outline
+            starts here. */}
+        <h1 className="sr-only">
+          Dencity Dental Care — Future Dentistry Clinic in Suratgarh, Rajasthan
+        </h1>
+
         <div className="absolute inset-0 z-0">
-          <Image src="/gallery/living-room.JPG" alt="Background" fill style={{ objectFit: "cover", opacity: 0.2 }} priority />
+          <Image src="/gallery/living-room.JPG" alt="Dencity Dental Care clinic interior in Suratgarh" fill style={{ objectFit: "cover", opacity: 0.2 }} priority />
         </div>
 
         {/* Deep-perspective 3D clinic gallery — floats and dollies behind the

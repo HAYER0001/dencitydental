@@ -80,33 +80,15 @@ export default function TestimonialsMarquee({ testimonials }: TestimonialsMarque
   };
 
   return (
-    <section
-      aria-labelledby="testimonials-section-title"
-      className="py-section-sm overflow-hidden bg-background"
+    /* Marquee Track Wrapper — the section + header are owned by the parent
+       Testimonials server component so both live and unavailable states share them. */
+    <div
+      className="relative w-full overflow-hidden select-none py-2"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocusCapture={handleFocus}
+      onBlurCapture={handleBlur}
     >
-      <div className="mx-auto w-full max-w-6xl px-6">
-        <div className="max-w-2xl mb-12">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-[#0A5C5C]">
-            Google Reviews
-          </p>
-          <h2 id="testimonials-section-title" className="mt-3 text-3xl font-bold tracking-tight text-[#0F1717]">
-            What Our Patients Say on{" "}
-            <span className="text-[#0A5C5C]">Google Reviews</span>
-          </h2>
-          <p className="mt-4 text-base text-[#0F1717]/70 leading-relaxed">
-            Real, verified feedback from patients who left us 5-star reviews on Google after experiencing our calm, professional care.
-          </p>
-        </div>
-      </div>
-
-      {/* Marquee Track Wrapper */}
-      <div
-        className="relative w-full overflow-hidden select-none py-2"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onFocusCapture={handleFocus}
-        onBlurCapture={handleBlur}
-      >
         {/* Fading gradient edges for premium aesthetic */}
         <div className="absolute inset-y-0 left-0 z-10 w-12 sm:w-24 bg-gradient-to-r from-background to-transparent pointer-events-none" />
         <div className="absolute inset-y-0 right-0 z-10 w-12 sm:w-24 bg-gradient-to-l from-background to-transparent pointer-events-none" />
@@ -140,7 +122,7 @@ export default function TestimonialsMarquee({ testimonials }: TestimonialsMarque
                   // eslint-disable-next-line @next/next/no-img-element -- external Google-hosted avatar; no next.config remotePatterns needed
                   <img
                     src={testimonial.photoUrl}
-                    alt={testimonial.name}
+                    alt={`${testimonial.name}, verified Google reviewer of Dencity Dental Care`}
                     referrerPolicy="no-referrer"
                     loading="lazy"
                     className="h-10 w-10 shrink-0 rounded-full object-cover"
@@ -159,6 +141,6 @@ export default function TestimonialsMarquee({ testimonials }: TestimonialsMarque
           ))}
         </motion.div>
       </div>
-    </section>
   );
 }
+

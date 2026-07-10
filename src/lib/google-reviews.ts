@@ -1,17 +1,20 @@
 /**
- * Server-only utility for fetching live Google reviews via the Places API (New).
+ * Server-only utility for fetching live Google reviews via the Places Details API.
  *
  * Security: reads GOOGLE_PLACES_API_KEY from a non-public env var, so the key is
  * never bundled into the client. This module must only be imported from Server
  * Components / server code (it is consumed by the async Testimonials server
- * component). If the key is missing or the request fails, it returns an empty
- * array so the caller can gracefully fall back to curated testimonials.
+ * component).
+ *
+ * There is intentionally NO fake/fallback data: if the request fails or returns
+ * nothing, callers render a "temporarily unavailable" state so only the real
+ * Google API response is ever shown.
  */
 
 export type Testimonial = {
   id: string;
   name: string;
-  /** Subtitle shown under the author — the review's relative time for live data. */
+  /** Subtitle shown under the author — the review's relative time. */
   treatment: string;
   rating: number;
   review: string;
@@ -20,53 +23,42 @@ export type Testimonial = {
   photoUrl?: string;
 };
 
-// Place ID for the clinic. Overridable via env, defaults to the provided ID.
-const PLACE_ID = process.env.GOOGLE_PLACE_ID || "ChIJZe4XqkVyFjkRJz_a4SipVuI";
-const PLACES_ENDPOINT = "https://places.googleapis.com/v1/places";
-
 // Once per day: keeps the site fast and stays well under Places API quota.
 const REVALIDATE_SECONDS = 86400;
 
+// Legacy Places Details API review shape.
 type PlacesReview = {
-  name?: string;
+  author_name?: string;
+  profile_photo_url?: string;
   rating?: number;
-  text?: { text?: string };
-  originalText?: { text?: string };
-  relativePublishTimeDescription?: string;
-  authorAttribution?: {
-    displayName?: string;
-    uri?: string;
-    photoUri?: string;
-  };
+  text?: string;
+  relative_time_description?: string;
+  time?: number;
 };
 
 type PlacesResponse = {
-  reviews?: PlacesReview[];
+  result?: { reviews?: PlacesReview[] };
+  status?: string;
+  error_message?: string;
 };
 
 /**
  * Fetch 5-star reviews for the clinic's Google Place.
- * Returns [] on any failure so callers can fall back to curated content.
+ * Returns [] on any failure — the caller shows the unavailable state.
  */
 export async function getGoogleReviews(): Promise<Testimonial[]> {
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-
-  if (!apiKey) {
-    // Not configured (e.g. local dev without the key) — caller uses fallback.
+  if (!process.env.GOOGLE_PLACES_API_KEY) {
+    // Not configured — caller renders the "temporarily unavailable" state.
     return [];
   }
 
   try {
-    const res = await fetch(`${PLACES_ENDPOINT}/${PLACE_ID}?languageCode=en`, {
-      headers: {
-        "X-Goog-Api-Key": apiKey,
-        // Request only the review fields we render — smaller, cheaper responses.
-        "X-Goog-FieldMask":
-          "reviews.rating,reviews.text,reviews.originalText,reviews.authorAttribution,reviews.relativePublishTimeDescription",
-      },
+    const res = await fetch(
+      "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJZe4XqkVyFjkRJz_a4SipVuI&fields=reviews&key=" +
+        process.env.GOOGLE_PLACES_API_KEY,
       // Next.js persistent cache: pull fresh data at most once every 24 hours.
-      next: { revalidate: REVALIDATE_SECONDS },
-    });
+      { next: { revalidate: REVALIDATE_SECONDS } },
+    );
 
     if (!res.ok) {
       console.error(`Google Places API responded with status ${res.status}`);
@@ -74,25 +66,28 @@ export async function getGoogleReviews(): Promise<Testimonial[]> {
     }
 
     const data = (await res.json()) as PlacesResponse;
-    const reviews = data.reviews ?? [];
+
+    // The API returns HTTP 200 even on logical errors — check the status field.
+    if (data.status && data.status !== "OK") {
+      console.error(`Google Places API status: ${data.status}`, data.error_message ?? "");
+      return [];
+    }
+
+    const reviews = data.result?.reviews ?? [];
 
     return reviews
-      .filter((review) => {
-        const body = review.text?.text || review.originalText?.text;
-        return review.rating === 5 && Boolean(body?.trim());
-      })
+      .filter((review) => review.rating === 5 && Boolean(review.text?.trim()))
       .map((review, index) => {
-        const name = review.authorAttribution?.displayName?.trim() || "Google User";
-        const body = (review.text?.text || review.originalText?.text || "").trim();
+        const name = review.author_name?.trim() || "Google User";
 
         return {
-          id: review.name || `google-review-${index}`,
+          id: `google-review-${review.time ?? index}`,
           name,
-          treatment: review.relativePublishTimeDescription?.trim() || "Verified Google Review",
+          treatment: review.relative_time_description?.trim() || "Verified Google Review",
           rating: 5,
-          review: body,
+          review: (review.text ?? "").trim(),
           avatarLetter: name.charAt(0).toUpperCase(),
-          photoUrl: review.authorAttribution?.photoUri || undefined,
+          photoUrl: review.profile_photo_url || undefined,
         } satisfies Testimonial;
       });
   } catch (error) {

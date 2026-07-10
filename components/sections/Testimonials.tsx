@@ -1,57 +1,41 @@
 import TestimonialsMarquee from "./TestimonialsMarquee";
-import { getGoogleReviews, type Testimonial } from "@/lib/google-reviews";
-
-// Curated fallback shown only when live Google reviews can't be fetched
-// (missing API key locally, quota/network error, or an empty result).
-const FALLBACK_TESTIMONIALS: Testimonial[] = [
-  {
-    id: "t1",
-    name: "Sarah Jenkins",
-    treatment: "Smile Makeover",
-    rating: 5,
-    review: "I couldn't be happier with my smile makeover! Dr. Sharma took the time to explain every option. The whole experience was gentle and completely pain-free.",
-    avatarLetter: "S",
-  },
-  {
-    id: "t2",
-    name: "David Chen",
-    treatment: "Dental Implants",
-    rating: 5,
-    review: "The implant procedure was incredibly smooth. Dr. Daniel Okafor's planning was so precise. I felt absolutely zero discomfort and the result is perfect.",
-    avatarLetter: "D",
-  },
-  {
-    id: "t3",
-    name: "Priya Patel",
-    treatment: "Orthodontics",
-    rating: 5,
-    review: "My clear aligner journey was a breeze. Dr. Arjun Mehta is a master of his craft. The process was unhurried, clean, and extremely professional.",
-    avatarLetter: "P",
-  },
-  {
-    id: "t4",
-    name: "Marcus Vance",
-    treatment: "General Dentistry",
-    rating: 5,
-    review: "Going to the dentist used to cause me anxiety, but DENCITY has completely changed that. The space is calming, the staff is gentle, and they never rush.",
-    avatarLetter: "M",
-  },
-  {
-    id: "t5",
-    name: "Emily Watson",
-    treatment: "Pediatric Dentistry",
-    rating: 5,
-    review: "Dr. Elena Rodrigues is amazing with kids! My 6-year-old daughter actually looks forward to her checkups now. A truly family-friendly practice.",
-    avatarLetter: "E",
-  },
-];
+import { getGoogleReviews } from "@/lib/google-reviews";
+import { CURATED_REVIEWS, AGGREGATE_RATING, AGGREGATE_REVIEW_COUNT } from "@/lib/reviews-data";
 
 // Server Component: fetches live 5-star Google reviews (cached 24h) on the
-// server, keeping the API key off the client, then hands the data to the
-// client marquee which owns the Framer Motion anti-gravity physics.
+// server, keeping the API key off the client. If the live API is unavailable
+// (e.g. billing not yet enabled), it falls back to CURATED_REVIEWS — genuine,
+// transcribed Google reviews, never placeholder/fake data.
 export default async function Testimonials() {
   const liveReviews = await getGoogleReviews();
-  const testimonials = liveReviews.length > 0 ? liveReviews : FALLBACK_TESTIMONIALS;
+  const reviews = liveReviews.length > 0 ? liveReviews : CURATED_REVIEWS;
 
-  return <TestimonialsMarquee testimonials={testimonials} />;
+  return (
+    <section
+      aria-labelledby="testimonials-section-title"
+      className="py-section-sm overflow-hidden bg-background"
+    >
+      <div className="mx-auto w-full max-w-6xl px-6">
+        <div className="max-w-2xl mb-12">
+          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-[#0A5C5C]">
+            Google Reviews
+          </p>
+          <h2 id="testimonials-section-title" className="mt-3 text-3xl font-bold tracking-tight text-[#0F1717]">
+            What Our Patients Say on{" "}
+            <span className="text-[#0A5C5C]">Google Reviews</span>
+          </h2>
+          <p className="mt-4 text-base text-[#0F1717]/70 leading-relaxed">
+            Rated{" "}
+            <span className="font-semibold text-[#0F1717]">
+              {AGGREGATE_RATING.toFixed(1)}★
+            </span>{" "}
+            across {AGGREGATE_REVIEW_COUNT}+ verified Google reviews — real feedback
+            from patients who experienced our calm, professional care.
+          </p>
+        </div>
+      </div>
+
+      <TestimonialsMarquee testimonials={reviews} />
+    </section>
+  );
 }

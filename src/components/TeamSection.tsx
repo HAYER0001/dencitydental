@@ -57,7 +57,7 @@ export default function TeamSection() {
                     the hover zoom to the top so the head stays in frame. Grayscale → colour. */}
                 <Image
                   src={doctor.image}
-                  alt={doctor.name}
+                  alt={`${doctor.name.split("|")[0].trim()}, ${doctor.title} at Dencity Dental Care in Suratgarh`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-top origin-top grayscale transition duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.04]"

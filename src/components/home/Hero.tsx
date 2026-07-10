@@ -143,7 +143,7 @@ export default function Hero() {
             >
               <Image
                 src={src}
-                alt="Clinic luxury interior layout"
+                alt="Dencity Dental Care clinic interior in Suratgarh"
                 fill
                 sizes="320px"
                 className="object-cover pointer-events-none select-none"

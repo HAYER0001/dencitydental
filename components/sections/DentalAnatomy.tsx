@@ -69,7 +69,7 @@ export default function DentalAnatomy() {
               >
                 <Image
                   src="/images/tooth_anatomy.jpg"
-                  alt="Tooth Enamel Layer"
+                  alt="Illustration of the tooth enamel layer — advanced restorative dentistry at Dencity Dental Care"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   priority
@@ -88,7 +88,7 @@ export default function DentalAnatomy() {
               >
                 <Image
                   src="/images/tooth_anatomy.jpg"
-                  alt="Tooth Dentin Layer"
+                  alt="Illustration of the tooth dentin layer — advanced restorative dentistry at Dencity Dental Care"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   priority
@@ -107,7 +107,7 @@ export default function DentalAnatomy() {
               >
                 <Image
                   src="/images/tooth_anatomy.jpg"
-                  alt="Tooth Pulp Layer"
+                  alt="Illustration of the tooth pulp layer — painless root canal care at Dencity Dental Care"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   priority

@@ -32,7 +32,7 @@ export default function LiquidRevealHero() {
       <div className="absolute inset-0 -z-10 overflow-hidden bg-background">
         <Image
           src="/images/clinic_lobby.jpg"
-          alt="DENCITY Dental Clinic Lobby"
+          alt="Dencity Dental Care clinic lobby in Suratgarh, opposite Siyag Hospital"
           fill
           priority
           className="object-cover brightness-[0.98] contrast-[1.01]"
@@ -48,7 +48,7 @@ export default function LiquidRevealHero() {
       <div className="absolute inset-0 bg-background">
         <Image
           src="/images/clinic_lobby.jpg"
-          alt="DENCITY Dental Clinic Lobby"
+          alt="Dencity Dental Care clinic lobby in Suratgarh, opposite Siyag Hospital"
           fill
           priority
           className="object-cover brightness-[0.98] contrast-[1.01]"

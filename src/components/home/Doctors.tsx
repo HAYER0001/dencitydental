@@ -65,7 +65,7 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
         {doctor.image ? (
           <Image
             src={doctor.image}
-            alt={`Portrait of ${doctor.name}`}
+            alt={`${doctor.name}, dental specialist at Dencity Dental Care in Suratgarh`}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover"
