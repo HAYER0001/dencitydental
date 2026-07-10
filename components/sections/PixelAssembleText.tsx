@@ -21,6 +21,7 @@ export default function PixelAssembleText({ text = "Clinical Excellence" }: Pixe
   const [mounted, setMounted] = useState(false);
   const [pixels, setPixels] = useState<Pixel[]>([]);
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 });
+  const [scale, setScale] = useState(0.85);
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -78,6 +79,22 @@ export default function PixelAssembleText({ text = "Clinical Excellence" }: Pixe
     setPixels(pixelList);
   }, [text, mounted]);
 
+  // Responsive scale: shrink the fixed-px pixel grid so it always fits the
+  // viewport width (with side padding) — prevents horizontal overflow/clipping
+  // on mobile while capping at 0.85 on wide screens. Recomputes on resize.
+  useEffect(() => {
+    if (!mounted || !gridSize.width) return;
+
+    const computeScale = () => {
+      const available = Math.min(window.innerWidth * 0.9, 1024);
+      setScale(Math.min(0.85, available / gridSize.width));
+    };
+
+    computeScale();
+    window.addEventListener("resize", computeScale);
+    return () => window.removeEventListener("resize", computeScale);
+  }, [mounted, gridSize.width]);
+
   // 4. Stagger container configuration (staggerChildren: 0.006 for fast matrix fluid reveal)
   const containerVariants = {
     hidden: {},
@@ -110,7 +127,10 @@ export default function PixelAssembleText({ text = "Clinical Excellence" }: Pixe
     return (
       <section className="py-section-sm bg-background border-b border-[#0F1717]/5" aria-labelledby="pixel-section-title">
         <Container className="flex flex-col items-center">
-          <h2 id="pixel-section-title" className="text-3xl font-bold tracking-tight text-center text-[#0F1717]">
+          <h2
+            id="pixel-section-title"
+            className="font-bold tracking-tight text-center text-[#0F1717] text-[clamp(1.75rem,7vw,3rem)]"
+          >
             {text}
           </h2>
         </Container>
@@ -134,20 +154,21 @@ export default function PixelAssembleText({ text = "Clinical Excellence" }: Pixe
           </h2>
         </div>
 
-        {/* Scaled responsive wrapper to center pixels across screen dimensions */}
-        <div 
+        {/* Scaled responsive wrapper to center pixels across screen dimensions.
+            Scale is derived from viewport width so the grid never overflows. */}
+        <div
           className="relative select-none pointer-events-none"
           style={{
             width: gridSize.width,
             height: gridSize.height,
-            transform: "scale(0.85)",
-            maxWidth: "95vw",
+            transform: `scale(${scale})`,
+            transformOrigin: "center",
           }}
         >
           {reduceMotion ? (
             // Accessibility fallback
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-3xl font-bold text-[#0F1717] tracking-[0.1em] uppercase font-mono">
+              <span className="font-bold text-[#0F1717] tracking-[0.1em] uppercase font-mono text-[clamp(1.5rem,6vw,3rem)] break-words">
                 {text}
               </span>
             </div>

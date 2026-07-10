@@ -32,16 +32,16 @@ export default function ContactPage() {
                 <div>
                   <dt className="font-semibold text-foreground">Phone Support</dt>
                   <dd className="mt-1 text-muted">
-                    <a href="tel:+15550123456" className="hover:text-clinic-teal transition-colors">
-                      +1 (555) 012-3456
+                    <a href="tel:+919829675893" className="hover:text-clinic-teal transition-colors">
+                      +91 98296 75893
                     </a>
                   </dd>
                 </div>
                 <div>
                   <dt className="font-semibold text-foreground">Email Inquiries</dt>
                   <dd className="mt-1 text-muted">
-                    <a href="mailto:hello@dencity.dental" className="hover:text-clinic-teal transition-colors">
-                      hello@dencity.dental
+                    <a href="mailto:clinic@dencitydentalcare.in" className="hover:text-clinic-teal transition-colors">
+                      clinic@dencitydentalcare.in
                     </a>
                   </dd>
                 </div>
@@ -52,12 +52,16 @@ export default function ContactPage() {
               <h2 className="text-heading-3 text-clinic-teal dark:text-clinic-teal-soft">Opening Hours</h2>
               <dl className="mt-4 space-y-2 text-body-sm text-muted">
                 <div className="flex justify-between">
-                  <dt>Monday &ndash; Friday</dt>
-                  <dd className="font-medium text-foreground">9:00 AM &ndash; 6:00 PM</dd>
+                  <dt>Monday</dt>
+                  <dd className="font-medium text-foreground">10:00 AM &ndash; 7:30 PM</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt>Saturday</dt>
-                  <dd className="font-medium text-foreground">9:00 AM &ndash; 2:00 PM</dd>
+                  <dt>Tuesday</dt>
+                  <dd className="font-medium text-foreground">10:00 AM &ndash; 7:00 PM</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt>Wednesday &ndash; Saturday</dt>
+                  <dd className="font-medium text-foreground">10:00 AM &ndash; 7:30 PM</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt>Sunday</dt>
@@ -73,12 +77,14 @@ export default function ContactPage() {
               <address className="mt-8 not-italic text-heading-3 leading-[1.1] text-foreground">
                 Swami Vivekananda Nagar
                 <br />
+                Opposite Siyag Hospital
+                <br />
                 Suratgarh
                 <br />
                 Rajasthan 335804
               </address>
               <a
-                href="https://maps.google.com/?q=Swami+Vivekananda+Nagar+Suratgarh+Rajasthan+335804"
+                href="https://maps.google.com/?q=Swami+Vivekananda+Nagar+Opposite+Siyag+Hospital+Suratgarh+Rajasthan+335804"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-10 inline-block text-eyebrow text-clinic-teal transition-colors hover:text-clinic-teal/70 dark:text-clinic-teal-soft"

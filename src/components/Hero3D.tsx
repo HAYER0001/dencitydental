@@ -108,10 +108,10 @@ export default function Hero3D() {
 
         <div className="absolute inset-0 z-10 pointer-events-none">
           <div ref={text1Ref} className="absolute inset-0 flex flex-col items-center justify-center text-center text-white uppercase font-black tracking-tighter leading-[0.85] text-[10vw] md:text-[12vw] mix-blend-difference">
-            <div>OFFICE FOR<br/>FUTURE<br/>DENTISTRY</div>
+            <div>CLINIC FOR<br/>FUTURE<br/>DENTISTRY</div>
           </div>
           <div ref={text2Ref} className="absolute inset-0 flex flex-col items-center justify-center text-center text-white uppercase font-black tracking-tighter leading-[0.85] text-[10vw] md:text-[12vw] mix-blend-difference">
-            <div>AESTHETIC<br/>REHABILITATION</div>
+            <div>DENCITY<br/>DENTAL CARE</div>
           </div>
           <div ref={text3Ref} className="absolute inset-0 flex flex-col items-center justify-center text-center text-white uppercase font-black tracking-tighter leading-[0.85] text-[10vw] md:text-[12vw] mix-blend-difference">
             <div>YOUR PERFECT<br/>SMILE</div>

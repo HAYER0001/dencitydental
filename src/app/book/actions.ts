@@ -57,15 +57,40 @@ function getMockBusySlots(dateStr: string, allSlots: string[]): string[] {
   return busySlots;
 }
 
-const ALL_SLOTS = [
-  "09:00 AM",
-  "10:00 AM",
-  "11:00 AM",
-  "01:00 PM",
-  "02:00 PM",
-  "03:00 PM",
-  "04:00 PM",
-];
+// Appointments run in 45-minute increments (slots spaced 45 mins apart).
+const SLOT_DURATION_MIN = 45;
+const OPEN_MIN = 10 * 60; // Clinic opens 10:00 AM every open day.
+
+// Closing time (minutes from midnight) per weekday. Sunday is closed — the
+// booking UI already excludes Sundays from the date picker.
+function closingMinutes(day: number): number | null {
+  if (day === 0) return null; // Sunday: closed
+  if (day === 2) return 19 * 60; // Tuesday: until 7:00 PM
+  return 19 * 60 + 30; // Mon, Wed–Sat: until 7:30 PM
+}
+
+// Format minutes-from-midnight into a "hh:mm AM/PM" slot label (parsed by slotToDate).
+function minutesToSlotLabel(total: number): string {
+  const h24 = Math.floor(total / 60);
+  const m = total % 60;
+  const period = h24 >= 12 ? "PM" : "AM";
+  const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+  return `${String(h12).padStart(2, "0")}:${String(m).padStart(2, "0")} ${period}`;
+}
+
+// Build the 45-minute slot grid for a given date, respecting that day's hours.
+// A slot is only offered if the full 45-minute appointment finishes by closing.
+function getSlotsForDate(dateStr: string): string[] {
+  const day = new Date(`${dateStr}T00:00:00`).getDay();
+  const close = closingMinutes(day);
+  if (close === null) return [];
+
+  const slots: string[] = [];
+  for (let t = OPEN_MIN; t + SLOT_DURATION_MIN <= close; t += SLOT_DURATION_MIN) {
+    slots.push(minutesToSlotLabel(t));
+  }
+  return slots;
+}
 
 // Helper to convert slot e.g. "09:00 AM" on date "2026-07-04" to ISO string
 function slotToDate(dateStr: string, slotStr: string): Date {
@@ -86,19 +111,23 @@ function slotToDate(dateStr: string, slotStr: string): Date {
 
 export async function checkAvailability(dateStr: string): Promise<string[]> {
   const calendar = getCalendarClient();
+  const daySlots = getSlotsForDate(dateStr);
+
+  // Clinic closed on this day (e.g. Sunday) — no slots.
+  if (daySlots.length === 0) return [];
 
   if (!calendar) {
     // Local dev or credentials missing: return mock available slots
-    const busy = getMockBusySlots(dateStr, ALL_SLOTS);
-    return ALL_SLOTS.filter((slot) => !busy.includes(slot));
+    const busy = getMockBusySlots(dateStr, daySlots);
+    return daySlots.filter((slot) => !busy.includes(slot));
   }
 
   try {
-    // Time boundaries (e.g. 9am to 6pm in user's date)
-    const timeMin = slotToDate(dateStr, ALL_SLOTS[0]);
-    const timeMax = slotToDate(dateStr, ALL_SLOTS[ALL_SLOTS.length - 1]);
-    // add an hour to cover the last slot duration
-    timeMax.setHours(timeMax.getHours() + 1);
+    // Time boundaries for this day's operating hours.
+    const timeMin = slotToDate(dateStr, daySlots[0]);
+    const timeMax = slotToDate(dateStr, daySlots[daySlots.length - 1]);
+    // extend past the last slot start to cover its full appointment duration
+    timeMax.setMinutes(timeMax.getMinutes() + SLOT_DURATION_MIN);
 
     const response = await calendar.freebusy.query({
       requestBody: {
@@ -109,11 +138,11 @@ export async function checkAvailability(dateStr: string): Promise<string[]> {
     });
 
     const busyPeriods = response.data.calendars?.[CALENDAR_ID]?.busy || [];
-    
-    // Filter our predefined slots
-    const availableSlots = ALL_SLOTS.filter((slot) => {
+
+    // Filter this day's slots against busy periods.
+    const availableSlots = daySlots.filter((slot) => {
       const slotStart = slotToDate(dateStr, slot);
-      const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000); // 1 hour duration
+      const slotEnd = new Date(slotStart.getTime() + SLOT_DURATION_MIN * 60 * 1000);
 
       // Check if slot overlaps with any busy period
       const isBusy = busyPeriods.some((period) => {
@@ -132,8 +161,8 @@ export async function checkAvailability(dateStr: string): Promise<string[]> {
   } catch (error) {
     console.error("Error fetching Google Calendar availability:", error);
     // Graceful fallback to mock availability
-    const busy = getMockBusySlots(dateStr, ALL_SLOTS);
-    return ALL_SLOTS.filter((slot) => !busy.includes(slot));
+    const busy = getMockBusySlots(dateStr, daySlots);
+    return daySlots.filter((slot) => !busy.includes(slot));
   }
 }
 
@@ -158,7 +187,7 @@ export async function createBooking(details: BookingDetails): Promise<{
 
   try {
     const start = slotToDate(details.date, details.time);
-    const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour appointment
+    const end = new Date(start.getTime() + SLOT_DURATION_MIN * 60 * 1000); // 45-minute appointment
 
     const eventDescription = `
 Treatment: ${details.treatmentName}

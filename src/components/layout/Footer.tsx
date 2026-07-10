@@ -4,9 +4,10 @@ import Container from "@/components/layout/Container";
 import Logo from "@/components/layout/Logo";
 
 const openingHours = [
-  { days: "Monday – Friday", hours: "8:00 – 18:00" },
-  { days: "Saturday", hours: "9:00 – 14:00" },
-  { days: "Sunday", hours: "Closed" },
+  { days: "Mon", hours: "10:00 AM – 7:30 PM" },
+  { days: "Tue", hours: "10:00 AM – 7:00 PM" },
+  { days: "Wed – Sat", hours: "10:00 AM – 7:30 PM" },
+  { days: "Sun", hours: "Closed" },
 ];
 
 type SocialLink = {
@@ -64,6 +65,8 @@ export default function Footer() {
             <address className="mt-5 not-italic text-body-lg font-semibold leading-[1.15] tracking-[-0.01em] text-white">
               Swami Vivekananda Nagar
               <br />
+              Opposite Siyag Hospital
+              <br />
               Suratgarh
               <br />
               Rajasthan 335804
@@ -71,18 +74,18 @@ export default function Footer() {
             <ul className="mt-8 space-y-3 text-body-sm text-white/70">
               <li>
                 <a
-                  href="tel:+15550123456"
+                  href="tel:+919829675893"
                   className="transition-colors duration-[var(--duration-fast)] hover:text-white"
                 >
-                  +1 (555) 012-3456
+                  +91 98296 75893
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:hello@dencity.dental"
+                  href="mailto:clinic@dencitydentalcare.in"
                   className="transition-colors duration-[var(--duration-fast)] hover:text-white"
                 >
-                  hello@dencity.dental
+                  clinic@dencitydentalcare.in
                 </a>
               </li>
             </ul>

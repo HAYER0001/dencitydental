@@ -51,15 +51,16 @@ export default function TeamSection() {
               key={index}
               className="group flex flex-col overflow-hidden rounded-card bg-background shadow-soft hover:shadow-card transition-shadow duration-300 border border-black/5 dark:border-white/10"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface">
-                {/* object-top: these are upper-body portraits — anchor to the top so the
-                    4:3 crop keeps the face, never the torso. Grayscale → colour on hover. */}
+              <div className="relative aspect-[3/4] w-full overflow-hidden bg-surface">
+                {/* Portrait 3:4 crop with object-top + origin-top: gives vertical
+                    headroom so faces are never clipped on any screen size, and anchors
+                    the hover zoom to the top so the head stays in frame. Grayscale → colour. */}
                 <Image
                   src={doctor.image}
                   alt={doctor.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover object-top grayscale transition duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.04]"
+                  className="object-cover object-top origin-top grayscale transition duration-700 ease-out group-hover:grayscale-0 group-hover:scale-[1.04]"
                 />
                 {/* Seat the portrait into the card with a soft floor gradient — subtle in
                     light, deeper in dark mode so the image melts into the card body. */}
