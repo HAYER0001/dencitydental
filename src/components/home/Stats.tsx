@@ -16,7 +16,7 @@ export type StatItem = {
 
 const defaultStats: StatItem[] = [
   { value: 15, suffix: "+", label: "Years Experience" },
-  { value: 10, suffix: "K+", label: "Patients Treated" },
+  { value: 20, suffix: "K+", label: "Patients Treated" },
   { value: 98, suffix: "%", label: "Patient Satisfaction" },
   { value: 24, suffix: "/7", label: "Emergency Care" },
 ];
