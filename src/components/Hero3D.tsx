@@ -35,7 +35,7 @@ export default function Hero3D() {
         trigger: containerRef.current,
         start: "top top",
         end: "bottom bottom",
-        scrub: 1,
+        scrub: 0.7,
       },
     });
 
@@ -47,7 +47,7 @@ export default function Hero3D() {
   }, { scope: containerRef });
 
   return (
-    <div id="hero-3d-wrapper" ref={containerRef} className="relative h-[400vh] w-full bg-[#0F1717]">
+    <div id="hero-3d-wrapper" ref={containerRef} className="relative h-[280vh] w-full bg-[#0F1717]">
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
 
         {/* Single authoritative page h1 for screen readers and crawlers — the
@@ -75,7 +75,7 @@ export default function Hero3D() {
             transition={
               reduceMotion
                 ? undefined
-                : { duration: 9, repeat: Infinity, ease: [0.37, 0, 0.63, 1] }
+                : { duration: 6.3, repeat: Infinity, ease: [0.37, 0, 0.63, 1] }
             }
           >
             <svg

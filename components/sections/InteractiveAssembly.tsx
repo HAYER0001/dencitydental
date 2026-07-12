@@ -71,10 +71,21 @@ export default function InteractiveAssembly() {
   const containerRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const [isExploded, setIsExploded] = useState(false);
+  // Pointer-capable desktop gate: mobile (<768px) stays entirely static on tap,
+  // so the magnetic hover physics only arm on real pointer devices.
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // 4. SSR Safety Check: Guard client side execution
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
   }, []);
 
   // 1. Layout & Scroll Un-tangling: Spring transition
@@ -178,17 +189,18 @@ export default function InteractiveAssembly() {
                     scale: 1,
                     zIndex: targetZIndex,
                   }}
-                  // 3. AnimmasterLib Interactive Magnetic Hover Matrix: scale up, translate y, premium easing shadow
-                  whileHover={{
-                    scale: 1.03,
-                    y: -5,
-                    boxShadow: "0 20px 40px -15px rgba(15, 23, 23, 0.15), 0 30px 60px -20px rgba(15, 23, 23, 0.1)",
-                  }}
-                  whileTap={{
-                    scale: 1.03,
-                    y: -5,
-                    boxShadow: "0 20px 40px -15px rgba(15, 23, 23, 0.15), 0 30px 60px -20px rgba(15, 23, 23, 0.1)",
-                  }}
+                  // 3. AnimmasterLib Interactive Magnetic Hover Matrix: scale up, translate y, premium easing shadow.
+                  // Desktop-only: touch devices get no whileHover/whileTap so mobile stays static on tap.
+                  whileHover={
+                    isDesktop && !reduceMotion
+                      ? {
+                          scale: 1.03,
+                          y: -5,
+                          boxShadow:
+                            "0 20px 40px -15px rgba(15, 23, 23, 0.15), 0 30px 60px -20px rgba(15, 23, 23, 0.1)",
+                        }
+                      : undefined
+                  }
                   transition={
                     reduceMotion 
                       ? { duration: 0 } 

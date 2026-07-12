@@ -205,10 +205,10 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
         onClick={onClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className={`group relative overflow-hidden flex h-full cursor-pointer flex-col rounded-card border bg-background p-7 shadow-soft transition-[box-shadow,border-color] duration-[var(--duration-base)] hover:shadow-card dark:border-white/10 ${
+        className={`group relative overflow-hidden flex h-full cursor-pointer flex-col rounded-card border bg-background p-7 shadow-soft transition-[box-shadow,border-color] duration-[var(--duration-base)] md:hover:shadow-card dark:border-white/10 ${
           isExpanded
             ? "border-clinic-teal/40 ring-1 ring-clinic-teal/40 md:col-span-2 lg:col-span-2"
-            : "border-deep-charcoal/5 hover:border-clinic-teal/25"
+            : "border-deep-charcoal/5 md:hover:border-clinic-teal/25"
         }`}
         style={{
           x: reduceMotion ? 0 : attractX,
@@ -220,7 +220,7 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
         {/* Soft interactive spotlight layer */}
         <motion.div
           style={{ background: spotlightBg }}
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 z-0"
+          className="absolute inset-0 pointer-events-none opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-0"
         />
 
         <div className="flex items-center gap-4 relative z-10">
@@ -228,7 +228,7 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
             className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-pill transition-colors duration-[var(--duration-base)] ${
               isExpanded
                 ? "bg-clinic-teal text-white"
-                : "bg-surface text-clinic-teal group-hover:bg-clinic-teal/10 dark:text-clinic-teal-soft"
+                : "bg-surface text-clinic-teal md:group-hover:bg-clinic-teal/10 dark:text-clinic-teal-soft"
             }`}
           >
             <svg
@@ -312,7 +312,7 @@ function ServiceCard({ service, index, isExpanded, onClick, cardVariants, pathVa
             <span>Learn more</span>
             <svg
               viewBox="0 0 24 24"
-              className="ml-1.5 h-4 w-4 transition-transform duration-[var(--duration-base)] group-hover:translate-x-1 group-active:translate-x-1"
+              className="ml-1.5 h-4 w-4 transition-transform duration-[var(--duration-base)] md:group-hover:translate-x-1"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"

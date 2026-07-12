@@ -50,12 +50,12 @@ export default function HeroReveal() {
           }}
           className="absolute z-0 flex items-center justify-center overflow-hidden shadow-none bg-black"
         >
-          {/* Black & White Mountain Landscape Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center grayscale contrast-125 brightness-90"
-            style={{ backgroundImage: "url('/images/mountain_landscape.jpg')" }}
+          {/* Dencity Dental clinic interior */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('/clinic-interior.jpeg')" }}
             role="img"
-            aria-label="Minimalist black and white mountain peaks"
+            aria-label="Dencity Dental Care clinic interior"
           />
           {/* Soft dark overlay for text contrast */}
           <motion.div 
@@ -72,7 +72,7 @@ export default function HeroReveal() {
             style={{ x: mounted ? (reduceMotion ? "0%" : leftTextX) : "0%" }}
             className="text-[12vw] font-black tracking-tighter text-foreground uppercase select-none font-sans leading-none drop-shadow-sm"
           >
-            HEXTS
+            DENCITY
           </motion.h2>
 
           {/* Right Text Label */}
@@ -80,13 +80,13 @@ export default function HeroReveal() {
             style={{ x: mounted ? (reduceMotion ? "0%" : rightTextX) : "0%" }}
             className="text-[12vw] font-black tracking-tighter text-foreground uppercase select-none font-sans leading-none drop-shadow-sm"
           >
-            LORETS
+            DENTAL
           </motion.h2>
         </div>
 
         {/* Dynamic center indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-foreground/45 z-10 pointer-events-none">
-          Scroll to reveal landscape
+          Scroll to reveal our clinic
         </div>
       </div>
     </div>
