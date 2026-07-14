@@ -17,32 +17,28 @@ export type Doctor = {
 
 const defaultDoctors: Doctor[] = [
   {
-    name: "Dr. Maya Sharma",
+    name: "Dr. Jagjeet Singh",
     qualification: "BDS, MDS (Prosthodontics)",
-    specialization: "Cosmetic & Restorative Dentistry",
+    specialization: "Implants & Prosthetics",
     experience: "15+ years experience",
-    bio: "Leads our smile design practice with a gentle, detail-first approach honed over thousands of restorations.",
+    bio: "Expert in restorative and aesthetic dentistry, dedicated to delivering precise, long-lasting natural smiles.",
+    image: "/doctors/jagjeet.jpg",
   },
   {
-    name: "Dr. Arjun Mehta",
+    name: "Dr. Varun Ahuja",
     qualification: "BDS, MDS (Orthodontics)",
     specialization: "Orthodontics & Clear Aligners",
     experience: "12+ years experience",
     bio: "Specialist in discreet aligner therapy and complex bite correction for teens and adults.",
+    image: "/doctors/varun.jpg",
   },
   {
-    name: "Dr. Elena Rodrigues",
-    qualification: "BDS, PG Dip (Paediatric Dentistry)",
-    specialization: "Pediatric Dentistry",
+    name: "Dr. Manisha",
+    qualification: "BDS",
+    specialization: "General & Pediatric Dentistry",
     experience: "8+ years experience",
-    bio: "Makes first dental visits feel easy — trusted by our youngest patients and their parents.",
-  },
-  {
-    name: "Dr. Daniel Okafor",
-    qualification: "BDS, MDS (Oral & Maxillofacial Surgery)",
-    specialization: "Implants & Oral Surgery",
-    experience: "10+ years experience",
-    bio: "From single implants to full-arch rehabilitation, focused on comfort-first surgical care.",
+    bio: "Compassionate general and pediatric care, focusing on preventive treatments and anxiety-free visits for all ages.",
+    image: "/doctors/manisha.jpg",
   },
 ];
 

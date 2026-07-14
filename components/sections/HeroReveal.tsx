@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 
 export default function HeroReveal() {
@@ -51,11 +52,12 @@ export default function HeroReveal() {
           className="absolute z-0 flex items-center justify-center overflow-hidden shadow-none bg-black"
         >
           {/* Dencity Dental clinic interior */}
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/clinic-interior.jpeg')" }}
-            role="img"
-            aria-label="Dencity Dental Care clinic interior"
+          <Image
+            src="/gallry/009a68aa-9a18-4907-bf9b-bb0facd4994f.JPG"
+            alt="Dencity Dental Care clinic interior"
+            fill
+            className="object-cover"
+            priority
           />
           {/* Soft dark overlay for text contrast */}
           <motion.div 
