@@ -61,7 +61,7 @@ const clinicJsonLd = {
   image: `${SITE_URL}/og-image.jpg`,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Swami Vivekananda Nagar, Opposite Siyag Hospital",
+    streetAddress: "E-16, near Siyag Hospital, behind LIC Office, PWD Colony",
     addressLocality: "Suratgarh",
     addressRegion: "Rajasthan",
     postalCode: "335804",

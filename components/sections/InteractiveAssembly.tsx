@@ -126,8 +126,8 @@ export default function InteractiveAssembly() {
                     {card.icon}
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-[#0F1717]">{card.title}</h3>
-                    <p className="mt-2 text-xs text-[#0F1717]/70 leading-relaxed">{card.description}</p>
+                    <h3 className="text-sm font-semibold text-slate-900">{card.title}</h3>
+                    <p className="mt-2 text-xs text-slate-700 leading-relaxed">{card.description}</p>
                   </div>
                 </div>
               </article>
@@ -226,8 +226,8 @@ export default function InteractiveAssembly() {
                     </div>
                     <div>
                       {/* 2. Bold Deep Charcoal title, slate description */}
-                      <h3 className="text-sm font-bold text-[#0F1717]">{card.title}</h3>
-                      <p className="mt-2 text-xs text-[#0F1717]/70 leading-relaxed">{card.description}</p>
+                      <h3 className="text-sm font-bold text-slate-900">{card.title}</h3>
+                      <p className="mt-2 text-xs text-slate-700 leading-relaxed">{card.description}</p>
                     </div>
                   </div>
 

@@ -63,13 +63,7 @@ export default function Footer() {
             {/* Address as an editorial block: distinct lines, tight leading, no icon —
                 the typography carries it. */}
             <address className="mt-5 not-italic text-body-lg font-semibold leading-[1.15] tracking-[-0.01em] text-white">
-              Swami Vivekananda Nagar
-              <br />
-              Opposite Siyag Hospital
-              <br />
-              Suratgarh
-              <br />
-              Rajasthan 335804
+              E-16, near Siyag Hospital, behind LIC Office, PWD Colony, Suratgarh, Rajasthan 335804
             </address>
             <ul className="mt-8 space-y-3 text-body-sm text-white/70">
               <li>

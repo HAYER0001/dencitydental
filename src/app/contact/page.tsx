@@ -75,16 +75,10 @@ export default function ContactPage() {
               {/* Editorial address: full brutalist heading scale, aggressive leading,
                   broken into clean print-style lines. No map-pin icon — type alone. */}
               <address className="mt-8 not-italic text-heading-3 leading-[1.1] text-foreground">
-                Swami Vivekananda Nagar
-                <br />
-                Opposite Siyag Hospital
-                <br />
-                Suratgarh
-                <br />
-                Rajasthan 335804
+                E-16, near Siyag Hospital, behind LIC Office, PWD Colony, Suratgarh, Rajasthan 335804
               </address>
               <a
-                href="https://maps.google.com/?q=Swami+Vivekananda+Nagar+Opposite+Siyag+Hospital+Suratgarh+Rajasthan+335804"
+                href="https://maps.google.com/?q=E-16+near+Siyag+Hospital+behind+LIC+Office+PWD+Colony+Suratgarh+Rajasthan+335804"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-10 inline-block text-eyebrow text-clinic-teal transition-colors hover:text-clinic-teal/70 active:text-clinic-teal/70 dark:text-clinic-teal-soft"
